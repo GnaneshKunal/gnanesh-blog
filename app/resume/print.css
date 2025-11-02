@@ -1,6 +1,7 @@
 /* Minimal print styles */
 @media print {
   /* Hide browser page title and timestamp by setting margin to 0 */
+
   @page {
     size: auto;
     margin: 0mm;
@@ -13,7 +14,7 @@
 
   /* Add some padding since we removed page margins */
   body {
-    padding: 10mm;
+    padding: 0mm 4mm;
     font-size: 10pt;
   }
 
@@ -24,6 +25,7 @@
 
   h2 {
     font-size: 12pt !important;
+    font-variant: small-caps;
   }
 
   p, li, div, span, a {
