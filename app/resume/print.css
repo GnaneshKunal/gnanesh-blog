@@ -1,0 +1,18 @@
+/* Minimal print styles */
+@media print {
+  /* Hide browser page title and timestamp by setting margin to 0 */
+  @page {
+    size: auto;
+    margin: 0mm;
+  }
+
+  /* Hide back button on print */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Add some padding since we removed page margins */
+  body {
+    padding: 10mm;
+  }
+}

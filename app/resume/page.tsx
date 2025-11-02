@@ -1,10 +1,11 @@
 import Link from "next/link";
+import "./print.css";
 
 export default function Resume() {
   return (
     <div className="min-h-screen p-6 max-w-4xl mx-auto">
       <div className="mb-8">
-        <Link href="/" className="text-sm hover:underline mb-4 inline-block">
+        <Link href="/" className="text-sm hover:underline mb-4 inline-block no-print">
           ← Back
         </Link>
         <h1 className="text-4xl font-medium mb-2">Gnanesh R</h1>
