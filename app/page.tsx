@@ -48,15 +48,15 @@ export default function Home() {
         {/* About */}
         <section className="space-y-4 text-sm leading-relaxed">
           <p className="text-foreground/80">
-            I'm a Senior Software Engineer at Setu, working on mission-critical payment infrastructure and distributed systems with a focus on low latency and high reliability. I also work part-time at Redis, where I contribute to OSS and build developer tools. Previously at Vital (worked on reverse engineering APIs) and HashedIn Technologies.
+            I&apos;m a Senior Software Engineer at Setu, working on mission-critical payment infrastructure and distributed systems with a focus on low latency and high reliability. I also work part-time at Redis, where I contribute to OSS and build developer tools. Previously at Vital (worked on reverse engineering APIs) and HashedIn Technologies.
           </p>
 
           <p className="text-foreground/80">
-            I'm a language agnostic engineer with experience understanding requirements and taking ownership of designing, building, and maintaining solutions.
+            I&apos;m a language agnostic engineer with experience understanding requirements and taking ownership of designing, building, and maintaining solutions.
           </p>
 
           <p className="text-foreground/80">
-            In my free time, I read novels and contribute to open source. I'm currently interested in distributed systems, databases, Linux, AI, data engineering, fintech, Emacs, and fitness.
+            In my free time, I read novels and contribute to open source. I&apos;m currently interested in distributed systems, databases, Linux, AI, data engineering, fintech, Emacs, and fitness.
           </p>
 
           <p className="text-foreground/80">

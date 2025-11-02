@@ -48,7 +48,7 @@ export default function Resume() {
               <span className="font-bold">Senior Software Engineer</span>
             </div>
             <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
-              <li>Led and maintained mission-critical payment infrastructure serving India's largest credit card payment provider, ensuring 99.95% uptime while handling 150+ TPS consistently with peak loads of over 200 TPS, demonstrating system resilience at scale</li>
+              <li>Led and maintained mission-critical payment infrastructure serving India&apos;s largest credit card payment provider, ensuring 99.95% uptime while handling 150+ TPS consistently with peak loads of over 200 TPS, demonstrating system resilience at scale</li>
               <li>Re-architected payment infrastructure from monolithic to event-driven architecture, scaling system capacity from 100 RPS to 750+ RPS while maintaining strong consistency through Redis integration</li>
               <li>Achieved 100% system uptime through fault-tolerant design and proactive monitoring, implementing automated failover mechanisms and immediate incident response protocols</li>
               <li>Architected critical optimization of transaction table storage (2.39 TB/partition, 8TB+ total, $2K+ monthly costs) reducing partitions by 45%—analyzed TOAST overhead from encrypted JSONB payloads, designed and prototyped stateless message-driven architecture shifting payload storage from PostgreSQL to RabbitMQ in-memory processing, achieving $27K annual cost savings, faster query performance, reduced replication lag, and improved PII security across production environments</li>
@@ -86,7 +86,7 @@ export default function Resume() {
               <span className="font-bold">Full Stack Engineer II</span>
             </div>
             <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
-              <li>Reverse engineered 8sleep's complex API infrastructure and provided seamless integration pathways, enabling data extraction from proprietary endpoints while ensuring maintainable and robust implementations</li>
+              <li>Reverse engineered 8sleep&apos;s complex API infrastructure and provided seamless integration pathways, enabling data extraction from proprietary endpoints while ensuring maintainable and robust implementations</li>
               <li>Designed and implemented provider-agnostic dashboard APIs that standardized data formats across multiple health device manufacturers, reducing integration complexity and maintenance overhead</li>
               <li>Built automated testing frameworks for API reliability verification, ensuring consistent data extraction and transformation across various provider platforms and API versions</li>
             </ul>
