@@ -48,61 +48,37 @@ export default function Home() {
         {/* About */}
         <section className="space-y-4 text-sm leading-relaxed">
           <p className="text-foreground/80">
-            Language agnostic engineer skilled at software development with experience of
-            understanding the requirements and tackling ownership of designing, building
-            and maintaining the solutions.
+            I'm a Senior Software Engineer at Setu, working on mission-critical payment infrastructure and distributed systems with a focus on low latency and high reliability. I also work part-time at Redis, where I contribute to OSS and build developer tools. Previously at Vital (worked on reverse engineering APIs) and HashedIn Technologies.
           </p>
 
           <p className="text-foreground/80">
-            In my free time, I read novels and contribute to OSS. I'm currently interested
-            in Distributed systems, databases, BSDs.
+            I'm a language agnostic engineer with experience understanding requirements and taking ownership of designing, building, and maintaining solutions.
           </p>
 
           <p className="text-foreground/80">
-            I live in India and work as a Software Engineer.
+            In my free time, I read novels and contribute to open source. I'm currently interested in distributed systems, databases, Linux, AI, data engineering, fintech, Emacs, and fitness.
           </p>
 
-          <div>
-            <h2 className="font-medium mb-2">Contact</h2>
-            <p className="text-foreground/80 mb-2">
-              You can contact me via any of the following means:
-            </p>
-            <ul className="space-y-1 text-foreground/80">
-              <li>
-                <a href="mailto:gnaneshkunal@outlook.com" className="hover:underline">
-                  E-mail
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://x.com/GnaneshKunal"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  Twitter
-                </a>
-              </li>
-            </ul>
-          </div>
+          <p className="text-foreground/80">
+            I live in India.
+          </p>
 
-          <div>
-            <p className="text-foreground/80 mb-2">
-              My PGP key is published at{" "}
-              <a
-                href="https://key.pub"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:underline"
-              >
-                key.pub
-              </a>
-              .
-            </p>
-            <p className="text-foreground/80 font-mono text-xs">
-              The key fingerprint is 3A9D 3599 1D7F 5F65 B0AE 596F 80CA 7AE9 4058 3689
-            </p>
-          </div>
+          <p className="text-foreground/80">
+            Reach out via{" "}
+            <a href="mailto:gnaneshkunal@outlook.com" className="hover:underline">
+              email
+            </a>
+            {" "}or{" "}
+            <a
+              href="https://x.com/GnaneshKunal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              Twitter
+            </a>
+            .
+          </p>
         </section>
       </main>
     </div>
