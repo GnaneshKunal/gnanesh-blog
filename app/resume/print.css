@@ -14,5 +14,19 @@
   /* Add some padding since we removed page margins */
   body {
     padding: 10mm;
+    font-size: 10pt;
+  }
+
+  /* Decrease font sizes */
+  h1 {
+    font-size: 16pt !important;
+  }
+
+  h2 {
+    font-size: 12pt !important;
+  }
+
+  p, li, div, span, a {
+    font-size: 8pt !important;
   }
 }
