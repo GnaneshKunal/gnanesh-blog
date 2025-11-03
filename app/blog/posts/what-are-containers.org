@@ -1,0 +1,120 @@
+#+TITLE:       What are containers!!
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2017-08-24 Thu
+#+URI:         /blog/%y/%m/%d/what-are-containers
+#+KEYWORDS:    Containers, Docker
+#+TAGS:        Containers, Docker
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Short note on containers.
+
+<2017-08-24 Thu>
+
+“Have you ever come across people saying or found yourself saying, “It
+worked on my machine”? Well, Don't say you never said /it/, you did.”
+
+“Of course, everyone does, when I want to transfer my project to a new
+machine, I usually fall into /this/ trap. Don't you say it too?”
+
+“Well, I /was/, but not these days.”
+
+“So what should we /do/ to stop saying /it,/ there's any special
+[[https://en.wikipedia.org/wiki/Operating-system-level_virtualization][Operating System Virtualization]] that works the same on every Machine?”
+
+“Well again, there's no such /thing/ that works fine on every Machine,
+but there are */Containers/*.” “What are /Containers/, Actually?”
+
+“[[https://en.wikipedia.org/wiki/Linux_containers][According to Wiki]], *Linux container* is a generic term for an
+implementation of [[https://en.wikipedia.org/wiki/Operating_system-level_virtualization][operating system-level virtualization]] for the [[https://en.wikipedia.org/wiki/Linux][Linux]]
+[[https://en.wikipedia.org/wiki/Operating_system][operating system]].”
+
+“I don't understand.”
+
+“Containers are /like/ lightweight Virtual Machines. Unlike VMs,
+containers do bundle a light-weight operating system with the only
+libraries and settings required to make the software work. This makes
+for efficient, lightweight, self-contained systems and guarantees that
+software will always run the same, regardless of where it's deployed. If
+you need a windows container, that exists too.”
+
+“Can you talk a bit higher level than /this/?”
+
+“Containers are a way to wrap up an application into its own isolated
+box. For the application in its container, it has no knowledge of any
+other applications or processes that exist outside of its box.
+Everything the application depends on to run successfully also lives
+inside this container. Wherever the box may move, the application will
+always be satisfied because it is bundled up with everything it needs to
+run.”
+
+“So what about /its/ *kernel*?”
+
+“The /Container-Manager/ shares the current *System kernel*.”
+
+“Can you give me a basic working architecture?”
+
+“Imagine a kitchen. We pack up all the appliances and furniture, the
+pots and pans, the dish soap and hand towels. This is our container
+
+[[file:img/wc-1.png]]
+
+We can now take this container and drop it into whatever host apartment
+we want, and it will be the same kitchen. All we must do is connect
+lectricity and water to it, and then we're clear to start cooking
+(because we have all the appliances we need!)
+
+[[file:img/wc-2.png]]
+
+In much the same way, containers are like this kitchen. There can be
+different kinds of rooms as well as many of the same kinds of rooms.
+What matters is that the containers come packaged up with everything
+they need. *source:*
+[[https://docs.microsoft.com/en-us/virtualization/windowscontainers/about/][*/Microsoft/*]]
+
+Hello there !
+
+“Well, that's amazing!! Is /that/ the only problem it solves ?”
+
+“Tell me how do you deploy a full stack Web app, for example?”
+
+“Creating Instances for each Service in the stack, Installing Operating
+System for each Service, Configuring runtime environments for each
+Service, Adding security layer for each Service, and so on. And, the
+last and crucial /one/ is connecting each Service to each other”
+
+“Well, All /that/ takes is huge cost and time, right?”
+
+“Yeah!! But it's worth the time, right?”
+
+“What if /it/ doesn't work the same?, And for example, if it's a Nginx
+server, the service that doesn't require much storage, affording it much
+storage wouldn't lead to a hardware wastage?, And each instance doesn't
+use 90% of the OS-library services, having all those unnecessary
+services in the instance would do any great? Would doing /that/ be
+/okay/?”
+
+“That's really /not okay/. Is there any better ways to do /it/?”
+
+“There are better ways to do /that/ in containers. You could build few
+containers, that your services need, and cluster /them/ together while
+exposing only the service that needs to be exposed.”
+
+“Are /they/ portable?”
+
+“Because the container has everything it needs to run your application,
+they are very portable and can run on any machine. You can create and
+test containers locally, then deploy that same container image to your
+private cloud, public cloud or service provider.”
+
+“Is there any app language restrictions?”
+
+“With containers, developers can build an app in any language. These
+apps are completely portable and can run anywhere --- laptop, desktop,
+server, private cloud, public cloud or service provider --- without any
+code changes.”
+
+“So you're telling me containers, doesn't just solve installing;
+configuring, adding security, etc., but also solves hardware wastage?”
+
+“Exactly!”

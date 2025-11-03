@@ -1,0 +1,139 @@
+#+TITLE:       Install packages & libraries on your local paths
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-05-13 Mon
+#+URI:         /blog/%y/%m/%d/install-packages-&-libraries-on-your-local-paths
+#+KEYWORDS:    Packages
+#+TAGS:        Packages
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Configure local paths.
+
+<2018-05-13 Sun>
+
+Fedora is my favorite Linux distribution which is sponsored by Red Hat.
+Fedora 28 is out with a lot of features. Instead of upgrading my fedora
+using =dnf-plugin-system-upgrade= or the =GNOME Software= way, I'd
+always like to download the ISO and install it from a USB Flash Drive
+(cause that returns a pointer to the ISO and I could use it anywhere
+(ಠ⌣ಠ)). 
+
+I have a love/hate relationship is with the Red Hat's
+=Automatic Partition= which usually leaves with just 50GB for the
+=Computer= (=/=) and the rest for your =$HOME=. So I usually do
+=Manual Partition= and give the partitions the right space. But
+=Automatic Partitions= will save you some time by automatically giving
+other partitions the right amount of space.
+
+This time, I opted for =Automatic Partition= and now I'm left with just
+52.6GB. Actually its just 42.7GB after doing =dnf upgrade=. In my past,
+the first time when I've given Fedora a try, I used it for more days
+than I thought I would and I was struggling with <12GB of free space.
+That was the time, I thought, I wish I had known how to configure and
+install libraries on my local paths without letting everything existing
+packages down(=pkg-config=).
+
+Now, I've finally found a way to install libraries on my own path. I
+like to use =$HOME/.local/=.
+
+** The Usual way
+   :PROPERTIES:
+   :CUSTOM_ID: the-usual-way
+   :END:
+
+Usually, When you compile libraries from source, the usual way would be
+
+#+BEGIN_SRC sh
+    ./configure
+    make
+    sudo make install
+#+END_SRC
+
+or
+
+#+BEGIN_SRC sh
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+#+END_SRC
+
+Where do you think the libraries get installed?
+
+That's =/usr/local/include= for headers, =/usr/local/lib/= for your
+libraries that you can link with your programs. And also, =pkg-config=
+easily finds your libraries and packages.
+
+What if you have less space on your =Computer= or like to install a
+package in a different location (like as I said =$HOME/.local/=)?
+
+** What You Need To Do
+   :PROPERTIES:
+   :CUSTOM_ID: what-you-need-to-do
+   :END:
+
+Well, that's easy though. The =configure= script also has a =--prefix=
+argument that allows you to install the package on given path.
+
+#+BEGIN_SRC sh
+    ./configure --prefix $HOME/.local
+    make
+    make install
+#+END_SRC
+
+*Note that you don't need the sudo command*, as
+the =$HOME= doesn't require you to have =root= privileges.
+
+After installing
+
+#+BEGIN_SRC sh
+    [monster@monster json-c]$ whereis json-c
+    json-c: /home/monster/.local/include/json-c
+#+END_SRC
+
+But will your packages be found and linked to other programs that use
+this packages?
+
+*Now I could finally install packages on my local paths.* (YAY) 
+*Will I be able to use it? The answer is NO.* (BOOO)
+
+You must add the path to your =$PATH= variable.
+
+#+BEGIN_SRC sh
+    # ~.bashrc
+    export PATH="$PATH:$HOME/.local/lib:$HOME/.local/share:$HOME/.local/include:$HOME/.local/bin"
+#+END_SRC
+
+Sometimes you get complains about shared libraries.
+
+#+BEGIN_SRC sh
+    # ~/.bashrc
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/lib"
+    export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.local/lib"
+#+END_SRC
+
+Also, you love =pkg-config=
+
+#+BEGIN_SRC sh
+    # ~/.bashrc
+    export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$HOME/.local/lib/pkgconfig"
+#+END_SRC
+
+When you manually compile, your =C/C++= compiler complains that it
+couldn't find the headers.
+
+#+BEGIN_SRC sh
+    # ~/.bashrc
+    export CPATH="$CPATH:$HOME/.local/include"
+    export C_INCLUDE_PATH="$C_INCLUDE_PATH:$HOME/.local/include"
+    export CPLUS_INCLUDE_PATH="$CPLUS_INCLUDE_PATH:$HOME/.local/include"
+#+END_SRC
+
+**** Useful Links
+     :PROPERTIES:
+     :CUSTOM_ID: useful-links
+     :END:
+
+-  [[http://www.network-theory.co.uk/docs/gccintro/gccintro_23.html][GCC Environemnt Variables]]
+-  [[https://askubuntu.com/questions/210210/pkg-config-path-environment-variable][pkg-config path Environment Variables]]
+-  [[https://stackoverflow.com/questions/480764/linux-error-while-loading-shared-libraries-cannot-open-shared-object-file-no-s][Shared Libraries paths']]

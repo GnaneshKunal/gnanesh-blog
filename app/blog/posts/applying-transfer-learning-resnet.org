@@ -1,0 +1,150 @@
+#+TITLE:       Applying Transfer Learning on ResNet using PyTorch
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-04-06 Fri
+#+URI:         /blog/%y/%m/%d/applying-transfer-learning-on-resnet-using-pytorch
+#+KEYWORDS:    Machine Learning, PyTorch
+#+TAGS:        Machine Learning, PyTorch
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Transfer Learning on a ResNet structure.
+
+<2018-04-06 Fri>
+
+Recently I've written a Classifier that is able to distinguish dogs from
+cats.
+
+Things I've learned: 
+1. How to use a Pretrained Model
+2. Apply Transfer Learning
+
+** DATASET
+   :PROPERTIES:
+   :CUSTOM_ID: dataset
+   :END:
+
+I've trained the model using Kaggle's classic dogs vs. cats dataset. The
+dataset can be found
+[[https://www.kaggle.com/c/dogs-vs-cats/data][here]]
+
+Well, I have to say it's not plug and play. At least not for the
+=torchvision= APIs. =torchvision= has an =ImageFolder= that's (right
+now) the standard to load images as well as it's labels automatically.
+The document suggests that =ImageFolder= requires the dataset in the
+following format:
+
+#+BEGIN_SRC sh
+    root/dog/xxx.png
+    root/dog/xxy.png
+    root/dog/xxz.png
+
+    root/cat/123.png
+    root/cat/nsdf3.png
+    root/cat/asd932_.png
+#+END_SRC
+
+So, I've arranged the dataset as the =ImageFolder= requires me to.
+
+** Model
+   :PROPERTIES:
+   :CUSTOM_ID: model
+   :END:
+
+The choice is arbitrary. I've considered some wired model. I don't know
+what to name it.
+
+#+BEGIN_SRC python
+    self.conv1 = nn.Conv2d(3, 8, 5)
+    self.pool = nn.MaxPool(2, 2)
+    self.conv2 = nn.Conv2d(8, 16, 3)
+    self.conv3 = nn.Conv2d(16, 32, 3)
+    self.conv4 = nn.Conv2d(32, 64, 3)
+    self.conv5 = nn.Conv2d(64, 64, 3)
+
+    self.fc1 = nn.Linear(64 * 5 * 5, 1000)
+    self.fc2 = nn.Linear(1000, 500)
+    self.fc3 = nn.Linear(500, 120)
+    self.fc4 = nn.Linear(120, 84)
+    self.fc5 = nn.Linear(84, 10)
+    self.fc6 = nn.Linear(10, 2)
+#+END_SRC
+
+With ReLu everywhere and softmax layer at the end. It worked but not as
+I thought its gonna be. And its still smaller than starter ResNet which
+is ResNet18. So, I've considered ResNet18 over my network.
+
+** Training
+   :PROPERTIES:
+   :CUSTOM_ID: training
+   :END:
+
+I've considered training my ResNet18 for the whole dataset. But the main
+problem is I don't have a GPU. (ノಠ益ಠ)ノ彡┻━┻
+
+So *Transfer Learning* is the only choice I've got. I've opted for a
+pretrained Model which is trained on an ImageNet.
+
+
+Choices I've got: 
+- Full Pretrained Model
+- Fine-Tuning the ConvNet
+- ConvNet as fixed feature extractor
+
+*** Full Pretrained Model
+    :PROPERTIES:
+    :CUSTOM_ID: full-pretrained-model
+    :END:
+
+I've got to tell you that using this is of no use. It just works. You
+don't have to do anything. You just have to write the predict function.
+
+*** Fine-Tuning the ConvNet
+    :PROPERTIES:
+    :CUSTOM_ID: fine-tuning-the-convnet
+    :END:
+
+Taking the whole network and retraining the parameters just looked cool
+and painful too. Well, this one worked really good. The results were
+good too. It took so much time to train the model than I've thought it
+would take. I've trained the model but forgot to save it. I trained it
+another time though. But the time consumption was really too much.
+
+*** ConvNet as fixed feature extractor
+    :PROPERTIES:
+    :CUSTOM_ID: convnet-as-fixed-feature-extractor
+    :END:
+
+Taking the whole network and adding a final layer and training just
+the last layer with softmax has done the job. The results are as
+expected. And also, It takes too less time compared to Full training
+and Fine-Tuning the ConvNet. The results are almost equal to the
+Fine-Tuning technique.
+
+** Predictions
+:PROPERTIES:
+:CREATED:  [2014-10-02 Thu 11:49]
+:CUSTOM_ID: predictions
+:END:
+I've got more than 91% of accuracy.
+
+[[file:img/cnn1.png]]
+
+
+I've tried some dog filter on [[https://twitter.com/praneshbalu7][praveen]] just to check whether it is able
+to classify him correctly. Well, it has classified him as a =cat=
+though. Look likes there's even more to do. ┬──┬ ノ( ゜-゜ノ)
+
+[[file:img/cnn2.png]]
+
+** Source Code
+   [[https://github.com/GnaneshKunal/dogs-vs-cats-classifier/][GnaneshKunal/dogs-vs-cats-classifier]]
+
+** Useful Links
+:PROPERTIES:
+:CREATED:  [2014-10-02 Thu 11:49]
+:CUSTOM_ID: Useful Links
+:END:
+1) [[https://cs231n.github.io/transfer-learning/][Transfer Learning]]
+2) [[https://arxiv.org/pdf/1512.03385.pdf][Resnet]]
+3) [[https://arxiv.org/pdf/1311.2901.pdf][Visualizing and Understanding Convolutional Networks]]
+4) [[http://pytorch.org/docs/0.3.1/][PyTorch]]

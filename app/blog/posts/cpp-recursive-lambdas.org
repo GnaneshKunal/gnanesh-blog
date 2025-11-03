@@ -1,0 +1,241 @@
+#+TITLE:       C++ Lambdas and Recursion
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-09-07 Fri
+#+URI:         /blog/%y/%m/%d/c++-lambdas-and-recursion
+#+KEYWORDS:    CPP, Programming Languages
+#+TAGS:        CPP, Programming Languages
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Short note on C++'s lambdas and recursion.
+
+<2018-09-07 Fri>
+
+Let me say I want to reverse a sequence of elements. First I've to
+define a function.
+
+One definition:
+
+#+BEGIN_SRC cpp
+    int main (void) {
+        // sequence
+        void reverse (vector<int> &arr) {
+            int i = 0, j = arr.size() - 1;
+            while (i < j) {
+                int temp = arr[i];
+                arr[i++] = arr[j];
+                arr[j--] = temp;
+            }
+        }
+        // calls reverse
+        return 0;
+    }
+#+END_SRC
+
+But you can't do that in cpp. You compiler complains about it.
+
+#+BEGIN_SRC sh
+    file.cpp:9:35: error: function definition is not allowed here
+      void reverse(vector<int> & arr) {
+                                      ^
+    file.cpp:21:3: error: no matching function for call to 'reverse'
+      reverse(arr);
+      ^~~~~~~
+#+END_SRC
+
+You can't define a function inside another function.
+
+So the only approach will be to define it elsewhere.
+
+#+BEGIN_SRC cpp
+    void reverse (vector<int> &arr) {
+        int i = 0, j = arr.size() - 1;
+        while (i < j) {
+            int temp = arr[i];
+            arr[i++] = arr[j];
+            arr[j--] = temp;
+        }
+    }
+
+    int main (void) {
+        // sequence
+        // calls reverse
+        return 0;
+    }
+#+END_SRC
+
+This just works.
+
+#+BEGIN_SRC sh
+    [monster@monster tmp]$ clang++ file.cpp && ./a.out
+    9 8 7 6 5 4 3 2 1 
+    [monster@monster tmp]$ 
+#+END_SRC
+
+It would be better to be modular and write a swap function. Note, we
+can't write the =swap= function inside the reverse function as it isn't
+allowed. The standard says a forward declaration is a must but it works
+without that in modern compilers.
+
+#+BEGIN_SRC cpp
+    void swap(int *a, int *b) {
+        int temp = *a;
+        *a = *b;
+        *b = temp;
+    }
+
+    void reverse (vector<int> &arr) {
+        int i = 0, j = arr.size() - 1;
+        while (i < j) {
+            swap(arr[i++], arr[j--]);
+        }
+    }
+    // main here
+#+END_SRC
+
+/Can't we just have the fancy rule to declare function 
+anywhere like in many other dynamic and static languages?/
+
+Long story short, we can. We've got cpp lambdas.
+
+#+BEGIN_SRC cpp
+    int main(void) {
+        // sequence
+        auto swap = [](int *a, int *b) {
+            int temp = *a;
+            *a = *b;
+            *b = temp;
+        };
+        
+        auto reverse = [swap](vector<int> & arr) {
+            int i = 0, j = arr.size() - 1;
+            while (i < j)
+                swap(arr[i++], arr[j--]);
+        };
+        // calls reverse
+    }
+#+END_SRC
+
+We can do this as well.
+
+#+BEGIN_SRC cpp
+    auto reverse = [](vector<int> &arr) {
+        auto swap = [](int *a, int *b) {
+            int temp = *a;
+            *a = *b;
+            *b = temp;
+        };
+        int i = 0, j = arr.size() - 1;
+        while (i < j)
+            swap(arr[i++], arr[j--]);
+    };
+#+END_SRC
+
+The =reverse= variable gets a datatype of
+=function<void(vector<int> &)>= and the =swap= variable gets a dataype
+of =function<void(int *, int *)>=.
+
+*** What about recursion?
+    :PROPERTIES:
+    :CUSTOM_ID: what-about-recursion
+    :END:
+
+Recursion is a bit tricky. The following code doesn't work.
+
+#+BEGIN_SRC cpp
+    auto factorial = [](int n) {
+        if (n <= 1) return 1;
+        return n * factorial(n - 1);
+    };
+#+END_SRC
+
+It doesn't work for various reasons.
+
+One of reason is that the return type is not known at all. =auto= can't
+deduce the type. we know what the if statement does, returns =1=, but
+we're not sure what the =else= statement would do. At least our compiler
+doesn't know.
+
+#+BEGIN_SRC sh
+    file.cpp:9:19: error: variable 'factorial' declared with deduced type 'auto'
+          cannot appear in its own initializer
+                         return n * factorial(n - 1);
+                                    ^
+    1 error generated.
+#+END_SRC
+
+Another the reason is that the =factorial= lambda function isn't
+captured at all. To capture it, we just have to pass the same in the
+capture clause, =[&]=. The =&= says to pass everything as a reference.
+
+#+BEGIN_SRC cpp
+    file.cpp:9:19: error: variable 'factorial' cannot be implicitly captured in a
+          lambda with no capture-default specified
+                         return n * factorial(n - 1);
+                                    ^
+    file.cpp:7:22: note: 'factorial' declared here
+      function<int(int)> factorial = [](int n) {
+                         ^
+    file.cpp:7:34: note: lambda expression begins here
+      function<int(int)> factorial = [](int n) {
+#+END_SRC
+
+Finally this would be our definition.
+
+#+BEGIN_SRC cpp
+    function<int(int)> factorial = [&](int n) {
+        if (n <= 1) return 1;
+        return n * factorial(n - 1);
+    };
+#+END_SRC
+
+/The only thing we've gained by lambdas are just that they
+can be defined anywhere./
+
+Well that's not true though. =cpp14= adds much more to it.
+
+In cpp14, even the parameters can be defined using =auto=.
+
+#+BEGIN_SRC cpp
+    auto lambda = [](auto x, auto y) {
+        return x + y;
+    };
+#+END_SRC
+
+The above code will be equivalent to
+
+#+BEGIN_SRC cpp
+    struct unnamed_lambda {
+        template<typename T, typename U>
+            auto operator()(T x, U y) const {
+                return x + y;
+            }
+        };
+    };
+    auto lambda = unnamed_lambda{};
+#+END_SRC
+
+The actual problem with lambdas is recursions. As said earlier we can
+define a =function<>= type and create a lambda function, but the problem
+with using =function<>= type is that =std::function= has performance
+issues because it does heap allocations.
+
+So the recursions in lambdas are applicable only when you define a
+=function<>= type. That was true until cpp11. But as cpp14 allowed the
+parameters to have =auto= declaration, we can pass the lambda function
+itself as an argument.
+
+#+BEGIN_SRC cpp
+    auto factorial = [](auto &&self, auto n) {
+        if (n <= 1) return 1;
+        return n * self(self, n - 1);
+    };
+
+    // usage: 
+    factorial(factorial, 5);
+#+END_SRC
+
+The =&&= is an RValue reference. We can ignore it, but as we're not
+changing it, we can just pass it as a reference. And look, we don't have
+to capture the function itself for recursion as the function is captured
+as an argument.

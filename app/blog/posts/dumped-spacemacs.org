@@ -1,0 +1,199 @@
+#+TITLE:       Dumped Spacemacs for Vanilla Emacs
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-04-14 Sun
+#+URI:         /blog/%y/%m/%d/dumped-spacemacs-for-vanilla-emacs
+#+KEYWORDS:    Emacs
+#+TAGS:        Emacs
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Configuring Vanilla Emacs.
+
+<2018-04-14 Sat>
+
+The startup time for [[http://spacemacs.org/][Spacemacs]] used to be pretty high. So I've tried
+unsetting few layers, but the problem still persists.
+
+I'd planned on dumping Spacemacs but I've started my emacs journey with
+Spacemacs, So learning the underlying layer of emacs was too difficult
+to me.
+
+ I've seen myself deleting Spacemacs, giving a try on [[https://www.gnu.org/software/emacs/][Emacs]] and coming
+back to Spacemacs again.
+
+Most of the times the common problems I've faced was /*I can't find
+any packages.*/
+
+I wish I've known about *[[https://melpa.org/][Melpa]] not showing me newer packages.* I've
+gone through the Melpa Installation steps, which was the starting
+point to configure Emacs with my own configuration.
+
+By copy pasting certain elisp commands on /.emacs/ I've found elisp to
+be a lot simpler and I could clearly understand what's happening in
+the background as well.
+
+** Autocomplete
+   :PROPERTIES:
+   :CUSTOM_ID: autocomplete
+   :END:
+
+Autocomplete is a must. You really need it if you need some cool
+=auto-completition= for other languages as well.
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] auto-complete [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    ;; Autocomplete
+    (ac-config-default)
+#+END_SRC
+
+** C/C++
+   :PROPERTIES:
+   :CUSTOM_ID: cc
+   :END:
+
+I love clang. And you must love it too. [[https://github.com/Sarcasm/irony-mode][Irony]] provides better editing
+experience for C and C++, and is based on =libclang=.
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] irony [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    ;; irony
+
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode)
+    (add-hook 'objc-mode-hook 'irony-mode)
+
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+#+END_SRC
+
+** Python Mode
+   :PROPERTIES:
+   :CUSTOM_ID: python-mode
+   :END:
+
+I'm using =anaconda-mode= as my python environment. The [[https://github.com/jorgenschaefer/elpy][elpy]] is another python environment with =automatic code rules=.
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] anaconda-mode [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    ;; Anaconda-mode python
+    (add-hook 'python-mode-hook' 'anaconda-mode)
+#+END_SRC
+
+** Web
+   :PROPERTIES:
+   :CUSTOM_ID: web
+   :END:
+
+You definitly need it.
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] web-mode [RET]
+    M-x package-install [RET] tide [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    ;;; HTML
+
+    (require 'web-mode)
+    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+    ;; tide typescript
+    (defun setup-tide-mode ()
+      (interactive)
+      (tide-setup)
+      (flycheck-mode +1)
+      (setq flycheck-check-syntax-automatically '(save mode-enabled))
+      (eldoc-mode +1)
+      (tide-hl-identifier-mode +1)
+      ;; company is an optional dependency. You have to
+      ;; install it separately via package-install
+      ;; `M-x package-install [ret] company`
+      (company-mode +1))
+
+    ;; aligns annotation to the right hand side
+    (setq company-tooltip-align-annotations t)
+
+    ;; formats the buffer before saving
+    (add-hook 'before-save-hook 'tide-format-before-save)
+
+    ;; tide typescript
+    (add-hook 'typescript-mode-hook #'setup-tide-mode)
+#+END_SRC
+
+** Git
+   :PROPERTIES:
+   :CUSTOM_ID: git
+   :END:
+
+Finally.
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] magit [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    ;; magit
+    (global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+
+** Melpa
+   :PROPERTIES:
+   :CUSTOM_ID: melpa
+   :END:
+
+Add the following in your =.emacs= and your are done.
+
+#+BEGIN_SRC lisp
+    (require 'package)
+    (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                        (not (gnutls-available-p))))
+           (proto (if no-ssl "http" "https")))
+      ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
+      (add-to-list 'package-archives (cons "melpa" (concat proto "://melpa.org/packages/")) t)
+      ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
+      (when (< emacs-major-version 24)
+        ;; For important compatibility libraries like cl-lib
+        (add-to-list 'package-archives '("gnu" . (concat proto "://elpa.gnu.org/packages/")))))
+    (package-initialize)
+#+END_SRC
+
+** Spacemacs-theme
+   :PROPERTIES:
+   :CUSTOM_ID: spacemacs-theme
+   :END:
+
+If you love =spacemacs-theme=, then this one's for you
+
+#+BEGIN_SRC lisp
+    M-x package-install [RET] spacemacs-theme [RET]
+#+END_SRC
+
+#+BEGIN_SRC lisp
+    ;;.emacs
+    (load-theme 'spacemacs-dark t)
+#+END_SRC
+
+Thinks are a bit fast now though. The startup time has decreased by
+*75%*. I'm finally experiencing the same joy I've got while using spacemacs.
+
+Well, you could mail, play games, listen to songs and do most of the
+things without leaving [[https://www.gnu.org/software/emacs/][Emacs]].
+
+Hey, do You know you could even control butterflies without leaving
+emacs?
+
+
+[[file:img/ds-butterfly.png]]

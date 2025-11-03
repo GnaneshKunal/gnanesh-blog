@@ -1,0 +1,69 @@
+#+TITLE:       Using JavaScript packages that doesn't have types
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-05-28 Mon
+#+URI:         /blog/%y/%m/%d/using-javascript-packages-that-doesnt-have-types
+#+KEYWORDS:    TypeScript, Programming Languages
+#+TAGS:        TypeScript, Programming Languages
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Using JS packages that doesn't have types.
+
+<2018-05-28 Mon>
+
+I write JavaScript, your write JavaScript, everyone writes JavaScript. I
+write TypeScript, but you may not write TypeScript.
+
+/"Oh!! Who cares?"/
+
+/"We do./
+
+/"If that's the case, use an alternate library, you know, each second,
+a shit JS library is born OUTTA NOWHERE."/
+
+/"But I need your types./
+
+JavaScript has too many packages that it even has two Google Maps
+Library(React). But only one of the library has Type Definitions. It's a
+pain to write your own definition file. You could dig the source code
+and contribute a type file or you could simply write a minimal one with
+functions that you use. Type file is almost all similar to a TS
+interface.
+
+A basic definition file would be like:
+
+#+BEGIN_SRC typescript
+    // yourLibrary.d.ts
+    declare module yourLibrary {
+        export interface objectName {
+            prop: type
+        }
+    }
+#+END_SRC
+
+On top of your file, add the following statement:
+
+#+BEGIN_SRC typescript
+    // someFile.ts
+    /// <reference path="./path/yourLibrary.d.ts" />
+#+END_SRC
+
+/But I've so many packages and writing a definition file for each
+package is tedious. I just want an ONE VS. ALL way./
+
+ Your definition file:
+
+#+BEGIN_SRC typescript
+    // index.d.ts
+    declare module "*";
+#+END_SRC
+
+Your statement:
+
+#+BEGIN_SRC typescript
+    // someFile.ts
+    /// <reference path="./path/index.d.ts" />
+#+END_SRC
+
+The above statement turns off type checking for all the packages, so
+it's not recommended.

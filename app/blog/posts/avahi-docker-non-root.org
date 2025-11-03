@@ -1,0 +1,550 @@
+#+TITLE:       mDNS, avahi and docker non-root containers
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2020-05-30 Sat
+#+KEYWORDS:    Networking, DNS, Avahi
+#+TAGS:        Networking, DNS, Avahi
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
+#+DESCRIPTION: Run mDNS on docker non-root containers.
+
+<2020-05-30 Sat>
+
+IP addresses are hard to remember and that's why we have DNS. But
+still, on most of the local systems, we don't have a DNS server and we
+have to remember the IP addresses of the systems. Even worse, let me
+say I have a cluster with 1000 nodes. Without a [[https://en.wikipedia.org/wiki/Name_server][nameserver]] or
+auto-discovery tool, I should remember all the IP addresses of the
+cluster nodes.
+
+One thing the modern cluster architecture supports is node
+discovery. Now, you have the same cluster with 1000 nodes, you don't
+have to remember all the nodes IP addresses but just one node and that
+one node also acts as a service discovery to other nodes. For example,
+if your application wants to talk to =node4= and you know only
+=node1='s IP address, you can either talk to =node1= as if you are
+talking to =node4= which =node1= redirects the communication to
+=node4= or you can ask =node1= for =node4='s IP address.
+
+But one major problem is that if =node1= goes down for some reason,
+even though the cluster will still be working with the rest of the 999
+nodes or one new node with different IP address gets added up, you
+lose the access to the entire cluster because all you have got is
+=node1='s IP address and =node1= is currently not in the cluster. For
+this reason, we have a cluster IP address. What exists at the core of
+the cluster system is a node discovery service. Your application
+connects to the cluster IP, and you don't have to worry about some
+nodes being down since the cluster IP is nowhere related to it and
+only acts as a discovery tool for the nodes and other services in the
+cluster.
+
+And now, we are at it again. We now have to remember the IP address of
+the cluster. If it is IPv6, it's nearly impossible to remember the
+address. The cluster system lacks a human-readable name, i.e., it
+lacks a name server. If the cluster exists in a cloud system, you
+don't have to worry about remembering since the external DNS comes
+into the picture and you can set up a domain name.
+
+Most of the local systems don't have a name server. If you look up the
+network to know what all systems are connected to the machine, you get
+a bunch of IP addresses. You have a local cluster, printer, mobile
+phones, laptops, IoT etc. 
+
+Let us take the printer example. You are connected to 10 different
+printers, each one is of a different type. And if you need to print a
+file and you want to select a particular printer, and let's say you
+don't the name of the printers but just the IP addresses. So what you
+have to do is to look up a printer IP addresses table and take the
+right printer's IP address. Still, you are limited to type it out or
+copy-paste the IP address. To solve this, most of the private networks
+append [[https://en.wikipedia.org/wiki/.local][.local]] at the end of the machine's [[https://en.wikipedia.org/wiki/Hostname][hostname]] using the [[https://en.wikipedia.org/wiki/Zero_configuration_networking][zeroconf]]
+technique. Now in the printer's example, if you look up the network
+for the connected printers, you get
+#+BEGIN_SRC text
+  1) my-epson-printer.local
+  2) my-canon-printer.local
+  3) my-hp-printer.local
+  ...
+#+END_SRC
+
+Now you don't have to remember the IP address of the printer you
+want. All you have to remember is a human-readable name. 
+
+Same goes for the cluster too. You can reach your cluster at
+=my-awesome-cluster.local=. Even better, you can access to a =node1=
+at =node1.my-awesome-cluster.local= and =node4= at
+=node4.my-awesome-cluster.local=. If say =node1= goes down and if the
+cluster starts a new node with a different IP address to take up
+=node1='s position, the new node will be reachable at
+=node1.my-awesome-cluster.local=. This is called [[https://en.wikipedia.org/wiki/Fully_qualified_domain_name][FQDN]].
+
+* Why do we need a hostname resolver for local networks?
+
+Earlier you used to connect to the cluster using the IP address of the
+cluster and it worked. Now when you tell your application to connect
+to the cluster using the =.local=, it simply doesn't know how to
+connect. The problem is that the application doesn't know how to
+resolve the =.local= domain name to the cluster IP address. It lacks a
+DNS server. And since the cluster is a local one, your DNS server
+can't resolve it.
+
+In the case of the cloud system, you would have set up a domain name
+and you can reach the cluster using the domain name. And the external
+DNS helps you to resolve the domain name to the cluster IP address.
+
+* mDNS
+
+To solve this problem we have [[https://en.wikipedia.org/wiki/Multicast_DNS][mDNS]]. mDNS is a protocol that resolves
+hostname to IP addresses within a small network that lacks the name
+server. By default, mDNS exclusively resolves hostnames ending with
+=.local=. But there will be a problem with the hosts that implement
+=.local= doesn't support mDNS protocol and can be found via a
+conventional unicast DNS sever. In those cases, necessary network
+configuration should be changed.
+
+** Example
+
+Lets try out an example.
+
+=RedisLabs= has a Redis Enterprise docker [[https://hub.docker.com/r/redislabs/redis/][image]] that does many
+things[fn:RE_Software:[[https://hub.docker.com/r/redislabs/redis/][Redis Enterprise Software]] is enterprise grade,
+distributed, in-memory NoSQL database server, fully compatible with
+open source Redis by Redis Labs.] but what we want here is the
+Enterprise cluster.
+
+*** Why Redis Enterprise docker image?
+
+The reason why I have chosen Redis Enterprise docker image is that it
+aligns well with the previous cluster example. With Redis Enterprise
+container, we can create a redis database cluster. And the cluster
+will have a domain name with =.local= (i.e.,
+=my-awesome-cluster.local=) and each node in the cluster receives a
+=FQDN= (i.e., =node1.my-awesome-cluster.local=).
+
+To sum up the above paragraph, we get a cluster which has a
+=<my-cluster>.local= address and nodes with
+=<my-node>.<my-cluster>.local=.
+
+Now let's start the example.
+
+You can start the container as follows:
+#+BEGIN_SRC bash
+  docker run -it --cap-add sys_resource -p 12000:12000 -p 8443:8443 -p 9443:9443 redislabs/redis
+#+END_SRC
+
+Ports =8443= and =9443= should be exposed compulsorily for the
+container to do all its magic for services.
+
+In the logs, you can find out that the container starts a mDNS server.
+
+#+BEGIN_SRC text
+  ...more logs...
+  2020-05-30 05:10:03,048 INFO success: mdns_server entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+  ...more logs...
+#+END_SRC
+
+The port =12000= we have exposed can be any free port. This is the
+port where the database we create will be listening on. In the current
+example, I'm creating just one node. But it can be many.
+
+Once the container is up and running, you can navigate to
+=localhost:8443=.
+
+You don't have to edit anything and under "Cluster configuration" you
+can give your cluster FQDN like this.
+
+[[file:img/mdns-redis-cluster-conf.png]]
+
+You can skip entering the certificates to which the container creates
+the certificates with default options. And then you can set some
+credentials the redis enterprise container requires you to. Once you
+set the credentials your page will be refreshed and you'll again be
+told to enter the credentials. Once you sign in, you are ready to
+create a database.
+
+You can select "Redis" as your database, and you'll be given a form to
+enter the configuration of the database.
+
+I'm giving the name as =node1= and most importantly, you must set the
+port to =12000= since that's the only port that we have exposed. Click
+on "show advanced options" and you can find the field "Endpoint port
+number" where you can enter the port. Enter it as =12000= (since
+that's the port I have exposed). Click "Activate" to create the
+database. You'll then be redirected to your created DB's configuration
+page.
+
+[[file:img/mdns-redis-db-conf-page.png]]
+
+You can find the =.local= address and IP address of the DB in the
+=Endpoint= field.
+
+Let us now create our sample application that simply connects to
+=node1= and pings the database.
+
+#+BEGIN_SRC dockerfile
+  FROM python:3.8-buster
+
+  RUN pip3 install redis
+
+  CMD ["python3"]
+#+END_SRC
+
+We have taken the python =buster= image which is Debian 10 that has
+the mdns packages which we will install later.
+
+Let's build it the application.
+
+#+BEGIN_SRC text
+$ docker build -t py-mdns .
+Sending build context to Docker daemon  3.072kB
+Step 1/3 : FROM python:3.8-buster
+3.8-buster: Pulling from library/python
+376057ac6fa1: Pull complete 
+5a63a0a859d8: Pull complete 
+496548a8c952: Pull complete 
+2adae3950d4d: Pull complete 
+0ed5a9824906: Pull complete 
+bb94ffe72389: Pull complete 
+241ada007777: Pull complete 
+be68aa7d1eeb: Pull complete 
+820ffc2e28ca: Pull complete 
+Digest: sha256:ebe8df5c3e2e10a7aab04f478226979e3b8754ee6cd30358379b393ef8b5321e
+Status: Downloaded newer image for python:3.8-buster
+ ---> 659f826fabf4
+Step 2/3 : RUN pip3 install redis
+ ---> Running in 1d31f5312e3e
+Collecting redis
+  Downloading redis-3.5.2-py2.py3-none-any.whl (71 kB)
+Installing collected packages: redis
+Successfully installed redis-3.5.2
+Removing intermediate container 1d31f5312e3e
+ ---> c21a8bc34782
+Step 3/3 : CMD ["python3"]
+ ---> Running in 711a17a97211
+Removing intermediate container 711a17a97211
+ ---> 27b0d68b69fc
+Successfully built 27b0d68b69fc
+Successfully tagged py-mdns:latest
+$ docker run --it py-mdns
+#+END_SRC
+
+Now lets start the application as follows:
+#+BEGIN_SRC bash
+$ docker  run -it py-mdns
+#+END_SRC
+
+Remember that the =.local= address of =node1= is
+=redis-12000.mycluster.local=, IP address is =172.17.0.2= and the port
+is =12000=.
+
+Now lets try to ping the database using the =.local= address.
+
+#+BEGIN_SRC bash
+$ docker  run -it py-mdns
+Python 3.8.3 (default, May 16 2020, 07:08:28) 
+[GCC 8.3.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import redis
+>>> redis.Redis(host='redis-12000.mycluster.local', port=12000).ping()
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 550, in connect
+    sock = self._connect()
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 575, in _connect
+    for res in socket.getaddrinfo(self.host, self.port, self.socket_type,
+  File "/usr/local/lib/python3.8/socket.py", line 918, in getaddrinfo
+    for res in _socket.getaddrinfo(host, port, family, type, proto, flags):
+socket.gaierror: [Errno -2] Name or service not known
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python3.8/site-packages/redis/client.py", line 1378, in ping
+    return self.execute_command('PING')
+  File "/usr/local/lib/python3.8/site-packages/redis/client.py", line 898, in execute_command
+    conn = self.connection or pool.get_connection(command_name, **options)
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 1183, in get_connection
+    connection.connect()
+  File "/usr/local/lib/python3.8/site-packages/redis/connection.py", line 554, in connect
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error -2 connecting to redis-12000.mycluster.local:12000. Name or service not known.
+#+END_SRC
+
+What happened is that your application lacks an mDNS service discovery
+such that it doesn't know whom to ask and how to resolve the =.local=
+hostname to IP address.
+
+Connecting using the IP address works.
+
+#+BEGIN_SRC bash
+  >>> redis.Redis(host='172.17.0.2', port=12000).ping()
+  True
+#+END_SRC
+
+Now lets try to add mDNS.
+
+* Avahi
+
+[[https://en.wikipedia.org/wiki/Avahi_(software)][Avahi]] is a free zero-configuration implementation of the mDNS
+protocol. Let's try to add it.
+
+#+BEGIN_SRC dockerfile
+  RUN set -ex \
+   && apt-get update && apt-get install -y --no-install-recommends avahi-daemon libnss-mdns
+#+END_SRC
+
+=libnss= by default can resolve up to two-label such that it can
+resolve the IP address of =mycluster.local= but what we need is
+three-label. Let's try to configure add that configuration too.
+
+#+BEGIN_SRC dockerfile
+  RUN set -ex \
+   && apt-get update && apt-get install -y --no-install-recommends avahi-daemon libnss-mdns \
+   # allow hostnames with more labels to be resolved. so that we can
+   # resolve node1.mycluster.local.
+   # (https://github.com/lathiat/nss-mdns#etcmdnsallow)
+   && echo '*' > /etc/mdns.allow \
+   # Configure NSSwitch to use the mdns4 plugin so mdns.allow is respected
+   && sed -i "s/hosts:.*/hosts:          files mdns4 dns/g" /etc/nsswitch.conf
+#+END_SRC
+
+Now, we have the configuration, we can start the =avahi-daemon= when
+our container start using the =ENTRYPOINT= script. Here's the
+entrypoint script.
+
+#+BEGIN_SRC bash
+#!/bin/bash
+
+set -e
+
+# start avahi's dependency
+service dbus start
+
+# start avahi
+service avahi-daemon start
+
+exec "$@"
+
+#+END_SRC
+
+This starts [[https://en.wikipedia.org/wiki/D-Bus][dbus]] which is a dependency of =avahi-daemon=. Now this is
+how the =Dockerfile= looks like.
+
+#+BEGIN_SRC dockerfile
+  FROM python:3.8-buster
+
+  WORKDIR /app
+
+  COPY entrypoint.sh /app/
+
+  RUN set -ex \
+   && apt-get update && apt-get install -y --no-install-recommends avahi-daemon libnss-mdns \
+   # allow hostnames with more labels to be resolved. so that we can
+   # resolve node1.mycluster.local.
+   # (https://github.com/lathiat/nss-mdns#etcmdnsallow)
+   && echo '*' > /etc/mdns.allow \
+   # Configure NSSwitch to use the mdns4 plugin so mdns.allow is respected
+   && sed -i "s/hosts:.*/hosts:          files mdns4 dns/g" /etc/nsswitch.conf \
+   && pip3 install redis
+
+  ENTRYPOINT ["bash", "./entrypoint.sh"]
+
+  CMD ["python3"]
+
+#+END_SRC
+
+Let's try to build the image and run the container.
+
+#+BEGIN_SRC bash
+  $ docker  run -it py-mdns
+  [ ok ] Starting system message bus: dbus.
+  [ ok ] Starting Avahi mDNS/DNS-SD Daemon: avahi-daemon.
+  Python 3.8.3 (default, May 16 2020, 07:08:28) 
+  [GCC 8.3.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import redis
+  >>> redis.Redis(host='redis-12000.mycluster.local', port=12000).ping()
+  True
+#+END_SRC
+
+As you can see, the avahi-daemon is being started. And it successfully
+resolves =redis-12000.mycluster.local=.
+
+* Running the container as non-root user
+
+Now let's talk about the
+security.[fn:running_non_root_containers:[[https://engineering.bitnami.com/articles/why-non-root-containers-are-important-for-security.html][Bitnami Engineering]]: Why
+non-root containers are important for security] Many container
+platforms accept only non-root containers, Ex: openshift. If you want
+your application to be deployed at any container platform, you
+can't. Let us try to run the container as a non-root user.
+
+#+BEGIN_SRC bash
+  $ docker  run -it --user 1001 py-mdns
+  mkdir: cannot create directory ‘/var/run/dbus’: Permission denied
+#+END_SRC
+
+The user argument takes a user UUID. It says to run as any other user
+rather than root. `1001` is not a special user. It might just be
+whatever UUID that doesn't match an existing user in the image. You
+can also put =USER= command inside the =Dockefile=.
+
+It requires root permission to start the application. You can check
+the same by connecting to the container.
+
+#+BEGIN_SRC bash
+  $ docker exec -it a701fb0d30e2 bash
+  root@a701fb0d30e2:/app# ps -aux
+  USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+  root           1  0.8  0.0  13340  8276 pts/0    Ss+  06:27   0:00 python3
+  message+      19  0.0  0.0   8552  2368 ?        Ss   06:27   0:00 /usr/bin/dbus-daemon --system
+  avahi         46  0.0  0.0   7868  2564 ?        S    06:27   0:00 avahi-daemon: running [a701fb0d30e2.local]
+  avahi         47  0.0  0.0   7868   296 ?        S    06:27   0:00 avahi-daemon: chroot helper
+  root          71  7.0  0.0   5748  3636 pts/1    Ss   06:27   0:00 bash
+  root          76  0.0  0.0   9388  3092 pts/1    R+   06:27   0:00 ps -aux
+  root@a701fb0d30e2:/app#
+#+END_SRC
+
+The reason why the application can't start as a non-root user is that
+=dbus=, =avahi='s dependency, requires root permissions to start.
+
+There's a way to run =avahi= without =dbus= by adding =enable-dbus=no=
+to the =[server]= section of [[https://linux.die.net/man/5/avahi-daemon.conf][avahi-daemon.conf]] file. The file exists
+in =/etc/avahi/avahi-daemon.conf=.
+
+=avahi= by default requires root permissions to start. We can bypass
+that by providing =--no-drop-root=
+flag.[fn:avahi-daemon-conf-dbus:=avahi-daemon.conf= has many
+configurations and we don't need it in our application, so I'm just
+setting the =enable-dbus= to =no=.]  You can check out all the options
+[[https://linux.die.net/man/8/avahi-daemon][here]]. Let us remove =dbus=. Also, let's start the process manually
+without using =service=.
+
+=Dockerfile=:
+#+BEGIN_SRC diff
+   # Dockerfile
+   && sed -i "s/hosts:.*/hosts:          files mdns4 dns/g" /etc/nsswitch.conf \
++  && printf "[server]\nenable-dbus=no\n" >> /etc/avahi/avahi-daemon.conf \
+   && pip3 install redis
+#+END_SRC
+
+=entrypoint.sh=:
+#+BEGIN_SRC diff
+  # entrypoint.sh
+- # start avahi's dependency
+- service dbus start
+
+  # start avahi
+- service avahi-daemon start
++ avahi-daemon --daemonize --no-drop-root
+
+#+END_SRC
+
+Now with our configuration, let's try to run the container.
+
+#+BEGIN_SRC text
+  $ docker  run -it --user 1001 py-mdns bash
+  Timeout reached while wating for return value
+  Could not receive return value from daemon process.
+#+END_SRC
+
+And the container exits. We still can't run the container as
+non-root. The actual problem is with the files and folders the
+=avahi-daemon= is accessing. These files should have either =root= or
+=avahi= permissions to access it.
+
+The files are:
+#+BEGIN_SRC text
+/etc/avahi/avahi-daemon.conf
+/var/run/avahi-daemon        
+#+END_SRC
+
+Lets try to change the permissions of the files and folders.
+
+#+BEGIN_SRC diff
+  # Dockerfile
+  && printf "[server]\nenable-dbus=no\n" >> /etc/avahi/avahi-daemon.conf \
++ && chmod 777 /etc/avahi/avahi-daemon.conf \
++ && mkdir -p /var/run/avahi-daemon \
++ && chown avahi:avahi /var/run/avahi-daemon \
++ && chmod 777 /var/run/avahi-daemon
+  && pip3 install redis
+#+END_SRC
+
+We change the permissions of the file =/etc/avahi-daemon.conf= so that
+the =avahi= daemon can access the file. We also create
+=/var/run/avahi-daemon= directory since the =avahi= daemon requires
+it. We also change the permissions of them after creating. Lets also
+add =USER= flag so by default it runs as the UUID specified.
+
+=Dockerfile=:
+#+BEGIN_SRC dockerfile
+  FROM python:3.8-buster
+
+  WORKDIR /app
+
+  COPY entrypoint.sh /app/
+
+  RUN set -ex \
+   && apt-get update && apt-get install -y --no-install-recommends avahi-daemon libnss-mdns \
+   # allow hostnames with more labels to be resolved. so that we can
+   # resolve node1.mycluster.local.
+   # (https://github.com/lathiat/nss-mdns#etcmdnsallow)
+   && echo '*' > /etc/mdns.allow \
+   # Configure NSSwitch to use the mdns4 plugin so mdns.allow is respected
+   && sed -i "s/hosts:.*/hosts:          files mdns4 dns/g" /etc/nsswitch.conf \
+   && printf "[server]\nenable-dbus=no\n" >> /etc/avahi/avahi-daemon.conf \
+   && chmod 777 /etc/avahi/avahi-daemon.conf \
+   && mkdir -p /var/run/avahi-daemon \
+   && chown avahi:avahi /var/run/avahi-daemon \
+   && chmod 777 /var/run/avahi-daemon \
+   && pip3 install redis
+
+  USER 1001
+
+  ENTRYPOINT ["bash", "./entrypoint.sh"]
+
+  CMD ["python3"]
+
+#+END_SRC
+
+=entrypoint.sh=:
+#+BEGIN_SRC bash
+  #!/bin/bash
+
+  set -e
+
+  avahi-daemon --daemonize --no-drop-root
+
+  exec "$@"
+
+#+END_SRC
+
+Now lets start the container. Now we don't have to pass =--user= flag
+since we have put =USER= command inside =Dockerfile=.
+
+#+BEGIN_SRC bash
+  $ docker  run -it --user 1001 py-mdns
+  Python 3.8.3 (default, May 16 2020, 07:08:28) 
+  [GCC 8.3.0] on linux
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import redis
+  >>> redis.Redis(host='redis-12000.mycluster.local', port=12000).ping()
+  True
+
+#+END_SRC
+
+We can also see that the container is running as non-root.
+
+#+BEGIN_SRC bash
+  $ docker exec -it c641eeb8559f bash
+  I have no name!@c641eeb8559f:/app$ ps -aux
+  USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+  1001           1  0.4  0.0  27248 16220 pts/0    Ss+  08:22   0:00 python3
+  1001           8  0.0  0.0   8012  2524 ?        S    08:22   0:00 avahi-daemon: running [c641eeb8559f.local]
+  1001          10 11.0  0.0   5748  3612 pts/1    Ss   08:23   0:00 bash
+  1001          15  0.0  0.0   9388  3072 pts/1    R+   08:23   0:00 ps -aux
+#+END_SRC
+
+We have reached the end of the post. You can find the code samples in
+this [[https://github.com/GnaneshKunal/avahi-docker-non-root][repository]].

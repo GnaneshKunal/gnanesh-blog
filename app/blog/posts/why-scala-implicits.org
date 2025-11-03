@@ -1,0 +1,251 @@
+#+TITLE:       Why Scala Implicits
+#+AUTHOR:      Gnanesh Kunal
+#+EMAIL:       gnaneshkunal@outlook.com
+#+DATE:        2018-06-20 Wed
+#+URI:         /blog/%y/%m/%d/why-scala-implicits
+#+KEYWORDS:    Programming Languages, Scala
+#+TAGS:        Programming Languages, Scala
+#+LANGUAGE:    en
+#+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t html-postamble:nil
+#+DESCRIPTION: Short note on why Implicits in Scala.
+
+<2018-06-20 Wed>
+
+There's a huge debate on Scala Implicits since they've introduced it to
+the language. Some people love it while some people comment it on making
+the code unpredictable. So should we use it?
+
+Before I tell you what =implicits= actually are, I'll tell you what they
+solve.
+
+If you have to store the details of a Person's name and age, there are
+two ways to do it.
+
+#+BEGIN_SRC scala
+    class Person(name: String, age: Int)
+#+END_SRC
+
+While this does the work we need, it's not the right way to do it. This
+simple declaration lacks a lot of features.
+
+To get most of all the features(mainly pattern matching) we have to
+declare a =case class=. So, Now the above code will be turned to:
+
+#+BEGIN_SRC scala
+    case class Person(name: String, age: Int)
+#+END_SRC
+
+Usage:
+
+#+BEGIN_SRC scala
+    Person("Gnanesh Kunal", 20)
+#+END_SRC
+
+The name here is just a simple string.
+
+It doesn't say anything about the person's =firstname= and =lastname=.
+We simply have to split the given string and must think the first item
+in the array corresponds to his first name. But that's still not the
+right way to do it. But for now, let me keep it simple and limit name to
+just a string.
+
+/It would be better if we have a separate datatype that defines
+something./ So, let's define some.
+
+#+BEGIN_SRC scala
+    case class Name(name: String) 
+    case class Age(age: Int)
+#+END_SRC
+
+So now, let me use those datatypes.
+
+#+BEGIN_SRC scala
+    val name = Name("Gnanesh Kunal")
+    val age = Age(20)
+    val person = Person(name, age)
+#+END_SRC
+
+If you try running the above code, you would get a type mismatch error.
+
+#+BEGIN_SRC sh
+    scala> val person = Person(name, age)
+    <console>:33: error: type mismatch;
+     found   : Name
+     required: String
+           val person = Person(name, age)
+                               ^
+    <console>:33: error: type mismatch;
+     found   : Age
+     required: Int
+           val person = Person(name, age)
+                                     ^
+#+END_SRC
+
+What we have known here is that the =name= and =age= variable have
+=Name= and =Age= datatypes respectively. But what we need is a =String=
+and =Int=. As I've told you earlier that using custom datatypes leads us
+to define many different data structures.
+
+The Person class must be re-implemented using the newer data types.
+
+#+BEGIN_SRC scala
+    case class Person(name: Name, age: Age)
+#+END_SRC
+
+This works now.
+
+#+BEGIN_SRC sh
+    scala> Person(name, age)
+    res1: Person = Person(Name(Gnanesh Kunal),Age(20))
+#+END_SRC
+
+But do you think the following code is gonna work?
+
+#+BEGIN_SRC scala
+    Person("Gnanesh Kunal", 20)
+#+END_SRC
+
+#+BEGIN_SRC sh
+    scala> Person("Gnanesh Kunal", 20)
+    <console>:30: error: type mismatch;
+     found   : String("Gnanesh Kunal")
+     required: Name
+           Person("Gnanesh Kunal", 20)
+                  ^
+    <console>:30: error: type mismatch;
+     found   : Int(20)
+     required: Age
+           Person("Gnanesh Kunal", 20)
+#+END_SRC
+
+The same error again. The object must be initialized like:
+
+#+BEGIN_SRC scala
+    Person(Name("Gnanesh Kunal"), Age(20))
+#+END_SRC
+
+Another implementation would be to try multiple constructors.
+
+#+BEGIN_SRC scala
+    case class Person(n: String, a: Int) {
+        var name: Name = Name(n)
+        var age: Age = Age(a)
+        def this(n: Name, a: Age) = this(n.name, a.age)
+    }   
+#+END_SRC
+
+The parameters names have been changed to =n= and =a= since each
+parameter defined will become a property in Scala.
+
+Now let us try to create the objects.
+
+#+BEGIN_SRC sh
+    scala> Person("Gnanesh Kunal", 20) # Yay!!
+    res10: Person = Person(Gnanesh Kunal,20)
+
+    scala> Person(Name("Gnanesh Kunal"), Age(20)) # Boo!!
+    <console>:30: error: type mismatch;
+     found   : Name
+     required: String
+           Person(Name("Gnanesh Kunal"), Age(20))
+                      ^
+    <console>:30: error: type mismatch;
+     found   : Age
+     required: Int
+           Person(Name("Gnanesh Kunal"), Age(20))
+                                            ^
+#+END_SRC
+
+/Why does it still not work?/
+
+Well!! The =this(n: Name, a: Age)= is an auxiliary constructor. The
+=apply= methods which will be generated for =case class= objects won't
+be defined for them. To define a class with =Name= and =Age= as
+parameters types, we must use the =new= keyword.
+
+#+BEGIN_SRC scala
+    new Person(Name("Gnanesh Kunal"), Age(20))
+#+END_SRC
+
+To do something like =Person(Name("Gnanesh Kunal"), Age(20))= to work we
+must create a companion object.
+
+#+BEGIN_SRC scala
+    // Person class Implementation ...
+
+    object Person {
+        def apply(n: Name, a: Int) = new Person(n.name, a.age) 
+    }
+#+END_SRC
+
+Finally it works.
+
+#+BEGIN_SRC sh
+    scala> Person("Gnanesh Kunal", 20)
+    res14: Person = Person(Gnanesh Kunal,20)
+
+    scala> Person(Name("Gnanesh Kunal"), Age(20))
+    res15: Person = Person(Gnanesh Kunal,20)
+#+END_SRC
+
+The complete above code to make the person class work.
+
+#+BEGIN_SRC scala
+    case class Name(name: String) 
+    case class Age(age: Int)
+
+    case class Person(n: String, a: Int) {
+        var name: Name = Name(n)
+        var age: Age = Age(a)
+        def this(n: Name, a: Age) = this(n.name, a.age)
+    }
+
+    object Person {
+        def apply(n: Name, a: Int) = new Person(n.name, a.age) 
+    }
+#+END_SRC
+
+So much hassle to define a simple class, right?
+
+*/Implicits to the rescue./*
+
+Implicits can be said as a syntactic sugar.
+
+Doing everything defined above under a minute.
+
+#+BEGIN_SRC scala
+    case class Name(name: String) 
+    case class Age(age: Int)
+
+    case class Person(name: Name, age: Age)
+
+    implicit def strToName(name: String): Name = Name(name)
+    implicit def intToAge(age: Int): Age = Age(age)
+#+END_SRC
+
+Everything fits.
+
+#+BEGIN_SRC scala
+    scala> Person(Name("Gnanesh Kunal"), Age(20))
+    res17: Person = Person(Name(Gnanesh Kunal),Age(20))
+
+    scala> Person("Gnanesh Kunal", 20)
+    res18: Person = Person(Name(Gnanesh Kunal),Age(20))
+#+END_SRC
+
+The way =Person("Gnanesh Kunal", 20)= works are, first, the compiler
+will check the parameter types. The compiler expects the first parameter
+of type =Name= but finds the type =String= it'll be ready to throw an
+error. Before throwing an error, the compiler checks for some function
+which converts the object of type =String= to =Name=. Something like
+=s: String => Name=.
+
+So as we have defined a function which converts a =String= datatype to
+=Name= it calls the function for us automatically. To make the compiler
+to call the function we have to prefix the keyword =implicit=. Implicit
+functions can't we called explicitly.
+
+/cool/ =☜(⌒▽⌒)☞=
+
+=implicit=s aren't just limited to functions, there's =implicit=
+variables, classes, objects etc.

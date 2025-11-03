@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
@@ -7,12 +9,18 @@ export default function Home() {
 
         {/* Social Links */}
         <div className="flex gap-4 text-sm">
-          <a
+          <Link
             href="/resume"
             className="hover:underline"
           >
             Resume
-          </a>
+          </Link>
+          <Link
+            href="/blog"
+            className="hover:underline"
+          >
+            Blog
+          </Link>
           <a
             href="https://x.com/GnaneshKunal"
             target="_blank"
