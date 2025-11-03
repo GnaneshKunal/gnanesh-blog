@@ -7,6 +7,11 @@
     margin: 0mm;
   }
 
+  /* Override any font imports - use system fonts only */
+  * {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+  }
+
   /* Hide back button on print */
   .no-print {
     display: none !important;
@@ -30,5 +35,17 @@
 
   p, li, div, span, a {
     font-size: 8pt !important;
+  }
+
+  /* Make contact info vertical for print */
+  .contact-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    margin: 0 !important;
+  }
+
+  .contact-info .separator {
+    display: none !important;
   }
 }

@@ -9,19 +9,19 @@ export default function Resume() {
           ← Back
         </Link>
         <h1 className="text-4xl font-medium mb-2">Gnanesh R</h1>
-        <div className="text-sm space-x-3">
+        <div className="text-sm flex flex-col gap-1 md:flex-row md:space-x-3 md:gap-0 contact-info">
           <a href="mailto:gnaneshkunal@outlook.com" className="hover:underline">
             gnaneshkunal@outlook.com
           </a>
-          <span>•</span>
+          <span className="separator hidden md:inline">•</span>
           <a href="https://gnanesh.me" className="hover:underline">
             gnanesh.me
           </a>
-          <span>•</span>
+          <span className="separator hidden md:inline">•</span>
           <a href="https://github.com/gnaneshkunal" className="hover:underline">
             github.com/gnaneshkunal
           </a>
-          <span>•</span>
+          <span className="separator hidden md:inline">•</span>
           <a href="https://linkedin.com/in/gnanesh-kunal" className="hover:underline">
             linkedin.com/in/gnanesh-kunal
           </a>
