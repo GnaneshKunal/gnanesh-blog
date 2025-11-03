@@ -19,7 +19,7 @@ export default function Home() {
             href="/blog"
             className="hover:underline"
           >
-            Blog
+            Logs
           </Link>
           <a
             href="https://x.com/GnaneshKunal"

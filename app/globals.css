@@ -16,3 +16,92 @@ body {
   color: var(--foreground);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 }
+
+/* Blog content styles */
+.blog-content {
+  max-width: none;
+}
+
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6 {
+  font-weight: 500;
+  color: var(--foreground);
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content h1 { font-size: 2rem; }
+.blog-content h2 { font-size: 1.5rem; }
+.blog-content h3 { font-size: 1.25rem; }
+
+.blog-content p {
+  color: rgba(34, 34, 34, 0.8);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.blog-content a {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
+.blog-content a:hover {
+  color: rgba(34, 34, 34, 0.7);
+}
+
+.blog-content code {
+  font-size: 0.875rem;
+  background: rgba(34, 34, 34, 0.05);
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.blog-content pre {
+  background: rgba(34, 34, 34, 0.05);
+  border: 1px solid rgba(34, 34, 34, 0.1);
+  padding: 1rem;
+  border-radius: 0.375rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.blog-content pre code {
+  background: transparent;
+  padding: 0;
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content ul {
+  list-style: disc;
+}
+
+.blog-content ol {
+  list-style: decimal;
+}
+
+.blog-content li {
+  color: rgba(34, 34, 34, 0.8);
+  margin-bottom: 0.5rem;
+}
+
+.blog-content strong {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.blog-content blockquote {
+  border-left: 4px solid rgba(34, 34, 34, 0.2);
+  padding-left: 1rem;
+  font-style: italic;
+  color: rgba(34, 34, 34, 0.7);
+  margin: 1.5rem 0;
+}

@@ -20,6 +20,20 @@ export function formatDate(dateString: string): string {
 }
 
 /**
+ * Format date as yyyy-mm-dd
+ */
+export function formatDateSimple(dateString: string): string {
+  try {
+    // Handle org-mode date format: "2018-05-13 Mon"
+    const dateMatch = dateString.match(/(\d{4}-\d{2}-\d{2})/);
+    if (!dateMatch) return dateString;
+    return dateMatch[1];
+  } catch {
+    return dateString;
+  }
+}
+
+/**
  * Create an excerpt from HTML content
  */
 export function createExcerpt(html: string, maxLength: number = 200): string {
