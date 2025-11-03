@@ -11,7 +11,7 @@ export default async function BlogPage() {
         <Link href="/" className="text-sm hover:underline mb-4 inline-block">
           ← Back
         </Link>
-        <h1 className="text-4xl font-medium mb-2">Logs</h1>
+        <h1 className="mb-2">Logs</h1>
         <p className="text-sm text-foreground/60">
           Gnanesh&apos;s web logs
         </p>

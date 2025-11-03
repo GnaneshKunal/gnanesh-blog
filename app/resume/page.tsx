@@ -8,7 +8,7 @@ export default function Resume() {
         <Link href="/" className="text-sm hover:underline mb-4 inline-block no-print">
           ← Back
         </Link>
-        <h1 className="text-4xl font-medium mb-2">Gnanesh R</h1>
+        <h1 className="mb-2">Gnanesh R</h1>
         <div className="text-sm flex flex-col gap-1 md:flex-row md:space-x-3 md:gap-0 contact-info">
           <a href="mailto:gnaneshkunal@outlook.com" className="hover:underline">
             gnaneshkunal@outlook.com
@@ -29,7 +29,7 @@ export default function Resume() {
       </div>
 
       <section className="mb-8">
-        <h2 className="text-xl font-medium mb-3">Summary</h2>
+        <h2 className="mb-3">Summary</h2>
         <p className="text-sm leading-relaxed text-foreground/80">
           Language-agnostic engineer with expertise in software development,
           demonstrating strong capabilities in understanding requirements, taking
@@ -39,7 +39,7 @@ export default function Resume() {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-medium mb-4">Experience</h2>
+        <h2 className="mb-4">Experience</h2>
         <div className="space-y-6">
           <div>
             <div className="text-sm mb-2">
@@ -109,7 +109,7 @@ export default function Resume() {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-medium mb-4">Technical Skills</h2>
+        <h2 className="mb-4">Technical Skills</h2>
         <div className="space-y-2 text-sm">
           <div>
             <span className="font-medium">Languages:</span>{" "}
@@ -131,7 +131,7 @@ export default function Resume() {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-medium mb-4">Notable Projects</h2>
+        <h2 className="mb-4">Notable Projects</h2>
         <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-6">
           <li><span className="font-medium">LazyKubernetes:</span> TUI for Kubernetes, winning project in FOSS 2020 hackathon</li>
           <li><span className="font-medium">RDBParser:</span> Parser for RDB file implemented in Rust</li>
@@ -140,7 +140,7 @@ export default function Resume() {
       </section>
 
       <section className="mb-8">
-        <h2 className="text-xl font-medium mb-4">Education</h2>
+        <h2 className="mb-4">Education</h2>
         <div className="text-sm">
           <div className="mb-2">
             <span className="text-foreground/60">2015-2019</span> | VIT University

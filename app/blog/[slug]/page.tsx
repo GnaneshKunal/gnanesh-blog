@@ -41,7 +41,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           ← Back to Logs
         </Link>
 
-        <h1 className="text-4xl font-medium mb-3">{post.title}</h1>
+        <h1 className="mb-3">{post.title}</h1>
 
         <div className="text-sm text-foreground/60 mb-6">
           <time dateTime={post.date}>{formatDate(post.date)}</time>

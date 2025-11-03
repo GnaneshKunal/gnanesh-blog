@@ -1,20 +1,14 @@
-@import "tailwindcss";
-
 /* Easy configuration - tweak these values as needed */
 :root {
-  --background: #fafafa;
-  --foreground: #222222;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --background: #ffffff;
+  --foreground: #000000;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; */
+  font-family: serif;
 }
 
 /* Blog content styles */
@@ -28,29 +22,36 @@ body {
 .blog-content h4,
 .blog-content h5,
 .blog-content h6 {
-  font-weight: 500;
-  color: var(--foreground);
   margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
-.blog-content h1 { font-size: 2rem; }
-.blog-content h2 { font-size: 1.5rem; }
-.blog-content h3 { font-size: 1.25rem; }
-
 .blog-content p {
-  color: rgba(34, 34, 34, 0.8);
-  line-height: 1.7;
-  margin-bottom: 1rem;
+  /* color: rgba(34, 34, 34, 0.8); */
+  /* line-height: 1.7; */
+  /* margin-bottom: 1rem; */
+
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+    font-weight: normal;
+    font-style: normal;
+}
+
+.blog-content .timestamp {
+  color: #bebebe;
 }
 
 .blog-content a {
-  color: var(--foreground);
+  /* color: var(--foreground); */
   text-decoration: underline;
 }
 
 .blog-content a:hover {
-  color: rgba(34, 34, 34, 0.7);
+  /* color: rgba(34, 34, 34, 0.7); */
 }
 
 .blog-content code {
@@ -89,13 +90,12 @@ body {
 }
 
 .blog-content li {
-  color: rgba(34, 34, 34, 0.8);
+  /* color: rgba(34, 34, 34, 0.8); */
   margin-bottom: 0.5rem;
 }
 
 .blog-content strong {
   font-weight: 500;
-  color: var(--foreground);
 }
 
 .blog-content blockquote {
