@@ -35,21 +35,18 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <div className="page-container">
-      <div className="page-header">
+    <div>
+      <div>
         <Link href="/blog">← Back to Logs</Link>
         <h1>{post.title}</h1>
-        <div className="timestamp">
+        <div>
           <time dateTime={post.date}>{formatDate(post.date)}</time>
         </div>
       </div>
 
-      <article
-        className="blog-content"
-        dangerouslySetInnerHTML={{ __html: post.htmlContent }}
-      />
+      <article dangerouslySetInnerHTML={{ __html: post.htmlContent }} />
 
-      <div className="page-footer">
+      <div>
         <Link href="/blog">← Back to Logs</Link>
       </div>
     </div>

@@ -6,24 +6,23 @@ export default async function BlogPage() {
   const posts = await getAllPosts();
 
   return (
-    <div className="page-container">
-      <div className="page-header">
+    <div>
+      <div>
         <Link href="/">← Back</Link>
         <h1>Logs</h1>
-        <p className="timestamp">Gnanesh&apos;s web logs</p>
+        <p>Gnanesh&apos;s web logs</p>
       </div>
 
       {posts.length === 0 ? (
-        <p className="timestamp">No logs yet.</p>
+        <p>No logs yet.</p>
       ) : (
-        <div className="blog-list">
+        <div>
           {posts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="blog-list-item"
             >
-              <time dateTime={post.date} className="timestamp">
+              <time dateTime={post.date}>
                 {formatDateSimple(post.date)}
               </time>
               <span>{post.title}</span>

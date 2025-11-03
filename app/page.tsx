@@ -2,11 +2,11 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="home-container">
-      <main className="home-main">
+    <div>
+      <main>
         <h1>Gnanesh</h1>
 
-        <nav className="home-nav">
+        <nav>
           <Link href="/resume">Resume</Link>
           <Link href="/blog">Logs</Link>
           <a
@@ -33,7 +33,7 @@ export default function Home() {
           <a href="mailto:gnaneshkunal@outlook.com">Email</a>
         </nav>
 
-        <section className="home-about">
+        <section>
           <p>
             I&apos;m a Senior Software Engineer at Setu, working on mission-critical payment infrastructure and distributed systems with a focus on low latency and high reliability. I also work part-time at Redis, where I contribute to OSS and build developer tools. Previously at Vital (worked on reverse engineering APIs) and HashedIn Technologies.
           </p>

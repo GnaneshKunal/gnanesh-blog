@@ -3,32 +3,32 @@ import "./print.css";
 
 export default function Resume() {
   return (
-    <div className="page-container resume-container">
-      <div className="page-header">
-        <Link href="/" className="no-print">
+    <div>
+      <div>
+        <Link href="/">
           ← Back
         </Link>
         <h1>Gnanesh R</h1>
-        <div className="contact-info">
+        <div>
           <a href="mailto:gnaneshkunal@outlook.com">
             gnaneshkunal@outlook.com
           </a>
-          <span className="separator">•</span>
+          <span>•</span>
           <a href="https://gnanesh.me">
             gnanesh.me
           </a>
-          <span className="separator">•</span>
+          <span>•</span>
           <a href="https://github.com/gnaneshkunal">
             github.com/gnaneshkunal
           </a>
-          <span className="separator">•</span>
+          <span>•</span>
           <a href="https://linkedin.com/in/gnanesh-kunal">
             linkedin.com/in/gnanesh-kunal
           </a>
         </div>
       </div>
 
-      <section className="resume-section">
+      <section>
         <h2>Summary</h2>
         <p>
           Language-agnostic engineer with expertise in software development,
@@ -38,12 +38,12 @@ export default function Resume() {
         </p>
       </section>
 
-      <section className="resume-section">
+      <section>
         <h2>Experience</h2>
-        <div className="experience-list">
-          <div className="experience-item">
-            <div className="job-header">
-              <span className="timestamp">Sept 2021-Present</span> |{" "}
+        <div>
+          <div>
+            <div>
+              <span>Sept 2021-Present</span> |{" "}
               <a href="https://setu.co">Setu</a> |{" "}
               <strong>Senior Software Engineer</strong>
             </div>
@@ -65,9 +65,9 @@ export default function Resume() {
             </ul>
           </div>
 
-          <div className="experience-item">
-            <div className="job-header">
-              <span className="timestamp">Oct 2021-Present</span> |{" "}
+          <div>
+            <div>
+              <span>Oct 2021-Present</span> |{" "}
               <a href="https://redis.io">Redis</a> |{" "}
               <strong>Software Engineer</strong>
             </div>
@@ -79,9 +79,9 @@ export default function Resume() {
             </ul>
           </div>
 
-          <div className="experience-item">
-            <div className="job-header">
-              <span className="timestamp">Aug 2021-Sep 2021</span> |{" "}
+          <div>
+            <div>
+              <span>Aug 2021-Sep 2021</span> |{" "}
               <a href="https://www.tryvital.com">Vital</a> |{" "}
               <strong>Full Stack Engineer II</strong>
             </div>
@@ -92,9 +92,9 @@ export default function Resume() {
             </ul>
           </div>
 
-          <div className="experience-item">
-            <div className="job-header">
-              <span className="timestamp">Feb 2019-Aug 2021</span> |{" "}
+          <div>
+            <div>
+              <span>Feb 2019-Aug 2021</span> |{" "}
               <a href="https://hashedin.com">HashedIn Technologies</a> |{" "}
               <strong>Senior Software Engineer - 1</strong>
             </div>
@@ -108,9 +108,9 @@ export default function Resume() {
         </div>
       </section>
 
-      <section className="resume-section">
+      <section>
         <h2>Technical Skills</h2>
-        <div className="skills-list">
+        <div>
           <div>
             <strong>Languages:</strong> Golang, Python, Rust, TypeScript, C
           </div>
@@ -126,26 +126,26 @@ export default function Resume() {
         </div>
       </section>
 
-      <section className="resume-section">
+      <section>
         <h2>Notable Projects</h2>
-        <ul className="projects-list">
+        <ul>
           <li><strong>LazyKubernetes:</strong> TUI for Kubernetes, winning project in FOSS 2020 hackathon</li>
           <li><strong>RDBParser:</strong> Parser for RDB file implemented in Rust</li>
           <li><strong>Raft-rs & Swim-rs:</strong> Implementation of Raft consensus and SWIM gossip protocol in Rust</li>
         </ul>
       </section>
 
-      <section className="resume-section">
+      <section>
         <h2>Education</h2>
-        <div className="education-item">
+        <div>
           <div>
-            <span className="timestamp">2015-2019</span> | VIT University
+            <span>2015-2019</span> | VIT University
           </div>
           <div>B.Tech. in Computer Science</div>
         </div>
       </section>
 
-      <p className="timestamp">Last updated November 1, 2025</p>
+      <p>Last updated November 1, 2025</p>
     </div>
   );
 }
