@@ -35,15 +35,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Link href="/blog" className="text-sm hover:underline mb-4 inline-block">
-          ← Back to Logs
-        </Link>
-
-        <h1 className="mb-3">{post.title}</h1>
-
-        <div className="text-sm text-foreground/60 mb-6">
+    <div className="page-container">
+      <div className="page-header">
+        <Link href="/blog">← Back to Logs</Link>
+        <h1>{post.title}</h1>
+        <div className="timestamp">
           <time dateTime={post.date}>{formatDate(post.date)}</time>
         </div>
       </div>
@@ -53,10 +49,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         dangerouslySetInnerHTML={{ __html: post.htmlContent }}
       />
 
-      <div className="mt-12 pt-8 border-t border-foreground/10">
-        <Link href="/blog" className="text-sm hover:underline">
-          ← Back to Logs
-        </Link>
+      <div className="page-footer">
+        <Link href="/blog">← Back to Logs</Link>
       </div>
     </div>
   );

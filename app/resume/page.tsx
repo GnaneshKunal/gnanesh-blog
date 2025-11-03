@@ -3,34 +3,34 @@ import "./print.css";
 
 export default function Resume() {
   return (
-    <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Link href="/" className="text-sm hover:underline mb-4 inline-block no-print">
+    <div className="page-container resume-container">
+      <div className="page-header">
+        <Link href="/" className="no-print">
           ← Back
         </Link>
-        <h1 className="mb-2">Gnanesh R</h1>
-        <div className="text-sm flex flex-col gap-1 md:flex-row md:space-x-3 md:gap-0 contact-info">
-          <a href="mailto:gnaneshkunal@outlook.com" className="hover:underline">
+        <h1>Gnanesh R</h1>
+        <div className="contact-info">
+          <a href="mailto:gnaneshkunal@outlook.com">
             gnaneshkunal@outlook.com
           </a>
-          <span className="separator hidden md:inline">•</span>
-          <a href="https://gnanesh.me" className="hover:underline">
+          <span className="separator">•</span>
+          <a href="https://gnanesh.me">
             gnanesh.me
           </a>
-          <span className="separator hidden md:inline">•</span>
-          <a href="https://github.com/gnaneshkunal" className="hover:underline">
+          <span className="separator">•</span>
+          <a href="https://github.com/gnaneshkunal">
             github.com/gnaneshkunal
           </a>
-          <span className="separator hidden md:inline">•</span>
-          <a href="https://linkedin.com/in/gnanesh-kunal" className="hover:underline">
+          <span className="separator">•</span>
+          <a href="https://linkedin.com/in/gnanesh-kunal">
             linkedin.com/in/gnanesh-kunal
           </a>
         </div>
       </div>
 
-      <section className="mb-8">
-        <h2 className="mb-3">Summary</h2>
-        <p className="text-sm leading-relaxed text-foreground/80">
+      <section className="resume-section">
+        <h2>Summary</h2>
+        <p>
           Language-agnostic engineer with expertise in software development,
           demonstrating strong capabilities in understanding requirements, taking
           ownership of design, building, and maintaining solutions. Experienced in
@@ -38,16 +38,16 @@ export default function Resume() {
         </p>
       </section>
 
-      <section className="mb-8">
-        <h2 className="mb-4">Experience</h2>
-        <div className="space-y-6">
-          <div>
-            <div className="text-sm mb-2">
-              <span className="italic text-foreground/60">Sept 2021-Present</span> |{" "}
-              <a href="https://setu.co" className="hover:underline">Setu</a> |{" "}
-              <span className="font-bold">Senior Software Engineer</span>
+      <section className="resume-section">
+        <h2>Experience</h2>
+        <div className="experience-list">
+          <div className="experience-item">
+            <div className="job-header">
+              <span className="timestamp">Sept 2021-Present</span> |{" "}
+              <a href="https://setu.co">Setu</a> |{" "}
+              <strong>Senior Software Engineer</strong>
             </div>
-            <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
+            <ul>
               <li>Led and maintained mission-critical payment infrastructure serving India&apos;s largest credit card payment provider, ensuring 99.95% uptime while handling 150+ TPS consistently with peak loads of over 200 TPS, demonstrating system resilience at scale</li>
               <li>Re-architected payment infrastructure from monolithic to event-driven architecture, scaling system capacity from 100 RPS to 750+ RPS while maintaining strong consistency through Redis integration</li>
               <li>Achieved 100% system uptime through fault-tolerant design and proactive monitoring, implementing automated failover mechanisms and immediate incident response protocols</li>
@@ -65,13 +65,13 @@ export default function Resume() {
             </ul>
           </div>
 
-          <div>
-            <div className="text-sm mb-2">
-              <span className="italic text-foreground/60">Oct 2021-Present</span> |{" "}
-              <a href="https://redis.io" className="hover:underline">Redis</a> |{" "}
-              <span className="font-bold">Software Engineer</span>
+          <div className="experience-item">
+            <div className="job-header">
+              <span className="timestamp">Oct 2021-Present</span> |{" "}
+              <a href="https://redis.io">Redis</a> |{" "}
+              <strong>Software Engineer</strong>
             </div>
-            <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
+            <ul>
               <li>Maintained RedisInsight V1 and provided technical expertise for V2 development</li>
               <li>Implemented visualizers for RedisGraph, RedisTimeseries, and module query explainer</li>
               <li>Developed RDB file parser in Rust for prototyping memory analysis features, with comprehensive support for Redis modules and custom data types</li>
@@ -79,26 +79,26 @@ export default function Resume() {
             </ul>
           </div>
 
-          <div>
-            <div className="text-sm mb-2">
-              <span className="italic text-foreground/60">Aug 2021-Sep 2021</span> |{" "}
-              <a href="https://www.tryvital.com" className="hover:underline">Vital</a> |{" "}
-              <span className="font-bold">Full Stack Engineer II</span>
+          <div className="experience-item">
+            <div className="job-header">
+              <span className="timestamp">Aug 2021-Sep 2021</span> |{" "}
+              <a href="https://www.tryvital.com">Vital</a> |{" "}
+              <strong>Full Stack Engineer II</strong>
             </div>
-            <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
+            <ul>
               <li>Reverse engineered 8sleep&apos;s complex API infrastructure and provided seamless integration pathways, enabling data extraction from proprietary endpoints while ensuring maintainable and robust implementations</li>
               <li>Designed and implemented provider-agnostic dashboard APIs that standardized data formats across multiple health device manufacturers, reducing integration complexity and maintenance overhead</li>
               <li>Built automated testing frameworks for API reliability verification, ensuring consistent data extraction and transformation across various provider platforms and API versions</li>
             </ul>
           </div>
 
-          <div>
-            <div className="text-sm mb-2">
-              <span className="italic text-foreground/60">Feb 2019-Aug 2021</span> |{" "}
-              <a href="https://hashedin.com" className="hover:underline">HashedIn Technologies</a> |{" "}
-              <span className="font-bold">Senior Software Engineer - 1</span>
+          <div className="experience-item">
+            <div className="job-header">
+              <span className="timestamp">Feb 2019-Aug 2021</span> |{" "}
+              <a href="https://hashedin.com">HashedIn Technologies</a> |{" "}
+              <strong>Senior Software Engineer - 1</strong>
             </div>
-            <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-10">
+            <ul>
               <li>Led integration of RedisGraph, RedisJSON, and RedisGears modules</li>
               <li>Optimized cypher query performance, reducing memory usage by 85%</li>
               <li>Implemented auto-discovery for Redis servers in Kubernetes environments</li>
@@ -108,48 +108,44 @@ export default function Resume() {
         </div>
       </section>
 
-      <section className="mb-8">
-        <h2 className="mb-4">Technical Skills</h2>
-        <div className="space-y-2 text-sm">
+      <section className="resume-section">
+        <h2>Technical Skills</h2>
+        <div className="skills-list">
           <div>
-            <span className="font-medium">Languages:</span>{" "}
-            <span className="text-foreground/80">Golang, Python, Rust, TypeScript, C</span>
+            <strong>Languages:</strong> Golang, Python, Rust, TypeScript, C
           </div>
           <div>
-            <span className="font-medium">Technologies:</span>{" "}
-            <span className="text-foreground/80">React, Docker, Redis, Git, PostgreSQL, RabbitMQ</span>
+            <strong>Technologies:</strong> React, Docker, Redis, Git, PostgreSQL, RabbitMQ
           </div>
           <div>
-            <span className="font-medium">Cloud & Infrastructure:</span>{" "}
-            <span className="text-foreground/80">AWS, Kubernetes, Terraform</span>
+            <strong>Cloud & Infrastructure:</strong> AWS, Kubernetes, Terraform
           </div>
           <div>
-            <span className="font-medium">Specializations:</span>{" "}
-            <span className="text-foreground/80">Distributed Systems, System Programming, Reverse Engineering</span>
+            <strong>Specializations:</strong> Distributed Systems, System Programming, Reverse Engineering
           </div>
         </div>
       </section>
 
-      <section className="mb-8">
-        <h2 className="mb-4">Notable Projects</h2>
-        <ul className="text-sm text-foreground/80 space-y-2 list-disc ml-6">
-          <li><span className="font-medium">LazyKubernetes:</span> TUI for Kubernetes, winning project in FOSS 2020 hackathon</li>
-          <li><span className="font-medium">RDBParser:</span> Parser for RDB file implemented in Rust</li>
-          <li><span className="font-medium">Raft-rs & Swim-rs:</span> Implementation of Raft consensus and SWIM gossip protocol in Rust</li>
+      <section className="resume-section">
+        <h2>Notable Projects</h2>
+        <ul className="projects-list">
+          <li><strong>LazyKubernetes:</strong> TUI for Kubernetes, winning project in FOSS 2020 hackathon</li>
+          <li><strong>RDBParser:</strong> Parser for RDB file implemented in Rust</li>
+          <li><strong>Raft-rs & Swim-rs:</strong> Implementation of Raft consensus and SWIM gossip protocol in Rust</li>
         </ul>
       </section>
 
-      <section className="mb-8">
-        <h2 className="mb-4">Education</h2>
-        <div className="text-sm">
-          <div className="mb-2">
-            <span className="text-foreground/60">2015-2019</span> | VIT University
+      <section className="resume-section">
+        <h2>Education</h2>
+        <div className="education-item">
+          <div>
+            <span className="timestamp">2015-2019</span> | VIT University
           </div>
-          <div className="text-foreground/80">B.Tech. in Computer Science</div>
+          <div>B.Tech. in Computer Science</div>
         </div>
       </section>
 
-      <p className="text-xs text-foreground/60">Last updated November 1, 2025</p>
+      <p className="timestamp">Last updated November 1, 2025</p>
     </div>
   );
 }

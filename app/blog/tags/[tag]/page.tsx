@@ -39,47 +39,39 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
   const posts = await getPostsByTag(tag);
 
   return (
-    <div className="min-h-screen p-6 max-w-4xl mx-auto">
-      <div className="mb-8">
-        <Link href="/blog" className="text-sm hover:underline mb-4 inline-block">
-          ← Back to Blog
-        </Link>
-        <h1 className="mb-2">
-          Posts tagged <span className="text-foreground/70">#{tag}</span>
+    <div className="page-container">
+      <div className="page-header">
+        <Link href="/blog">← Back to Blog</Link>
+        <h1>
+          Posts tagged <span className="tag-highlight">#{tag}</span>
         </h1>
-        <p className="text-sm text-foreground/60">
+        <p className="timestamp">
           {posts.length} {posts.length === 1 ? "post" : "posts"} found
         </p>
       </div>
 
       {posts.length === 0 ? (
-        <p className="text-sm text-foreground/60">No posts found with this tag.</p>
+        <p className="timestamp">No posts found with this tag.</p>
       ) : (
-        <div className="space-y-8">
+        <div className="posts-list">
           {posts.map((post) => (
-            <article
-              key={post.slug}
-              className="border-b border-foreground/10 pb-8 last:border-0"
-            >
-              <Link href={`/blog/${post.slug}`} className="group">
-                <h2 className="mb-2 group-hover:text-foreground/70 transition-colors">
-                  {post.title}
-                </h2>
+            <article key={post.slug} className="post-item">
+              <Link href={`/blog/${post.slug}`}>
+                <h2>{post.title}</h2>
               </Link>
 
-              <div className="flex items-center gap-3 text-xs text-foreground/60 mb-3">
-                <time dateTime={post.date}>{formatDate(post.date)}</time>
+              <div className="post-meta">
+                <time dateTime={post.date} className="timestamp">{formatDate(post.date)}</time>
                 {post.tags.length > 1 && (
                   <>
                     <span>•</span>
-                    <div className="flex gap-2">
+                    <div className="post-tags">
                       {post.tags
                         .filter((t) => t !== tag)
                         .map((t) => (
                           <Link
                             key={t}
                             href={`/blog/tags/${getTagSlug(t)}`}
-                            className="hover:underline"
                           >
                             #{t}
                           </Link>
@@ -90,21 +82,18 @@ export default async function TagPage({ params }: { params: Promise<{ tag: strin
               </div>
 
               {post.description && (
-                <p className="text-sm text-foreground/80 mb-3">
+                <p className="post-excerpt">
                   {post.description}
                 </p>
               )}
 
               {!post.description && (
-                <p className="text-sm text-foreground/80 mb-3">
+                <p className="post-excerpt">
                   {createExcerpt(post.htmlContent)}
                 </p>
               )}
 
-              <Link
-                href={`/blog/${post.slug}`}
-                className="text-sm hover:underline"
-              >
+              <Link href={`/blog/${post.slug}`} className="read-more">
                 Read more →
               </Link>
             </article>
