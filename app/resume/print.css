@@ -4,12 +4,12 @@
 
   @page {
     size: auto;
-    margin: 0mm;
+    margin: 10mm;
   }
 
-  /* Override any font imports - use system fonts only */
+  /* Use serif fonts for print */
   * {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif !important;
+    font-family: serif !important;
   }
 
   /* Hide back button on print */
@@ -17,35 +17,58 @@
     display: none !important;
   }
 
-  /* Add some padding since we removed page margins */
-  body {
-    padding: 0mm 4mm;
-    font-size: 10pt;
+  /* Reset resume container for print - remove right margin, equal padding */
+  .resume-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #ffffff !important;
   }
 
-  /* Decrease font sizes */
+  /* Reset heading margins */
   h1 {
-    font-size: 16pt !important;
+    margin-top: 0 !important;
+    margin-bottom: 8pt !important;
   }
 
   h2 {
-    font-size: 12pt !important;
-    font-variant: small-caps;
+    margin-top: 12pt !important;
+    margin-bottom: 6pt !important;
   }
 
-  p, li, div, span, a {
-    font-size: 8pt !important;
+  /* Links - blue color, no underline */
+  a {
+    color: #0000EE !important;
+    text-decoration: none !important;
   }
 
-  /* Make contact info vertical for print */
+  /* Contact info - vertical list, no extra spacing */
   .contact-info {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2px !important;
-    margin: 0 !important;
+    margin-bottom: 12pt !important;
+    line-height: 1.1 !important;
   }
 
-  .contact-info .separator {
+  .contact-info a {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  .contact-info br {
     display: none !important;
+  }
+
+  /* Section spacing */
+  section {
+    margin-bottom: 12pt !important;
+  }
+
+  section ul {
+    margin-top: 4pt !important;
+    margin-bottom: 4pt !important;
+  }
+
+  section li {
+    margin-bottom: 2pt !important;
   }
 }

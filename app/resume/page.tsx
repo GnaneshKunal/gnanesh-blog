@@ -1,27 +1,28 @@
 import Link from "next/link";
+import "./styles.css";
 import "./print.css";
 
 export default function Resume() {
   return (
-    <div>
+    <div className="resume-container">
       <div>
-        <Link href="/">
+        <Link href="/" className="no-print">
           ← Back
         </Link>
         <h1>Gnanesh R</h1>
-        <div>
+        <div className="contact-info">
           <a href="mailto:gnaneshkunal@outlook.com">
             gnaneshkunal@outlook.com
           </a>
-          <span>•</span>
+          <br />
           <a href="https://gnanesh.me">
             gnanesh.me
           </a>
-          <span>•</span>
+          <br />
           <a href="https://github.com/gnaneshkunal">
             github.com/gnaneshkunal
           </a>
-          <span>•</span>
+          <br />
           <a href="https://linkedin.com/in/gnanesh-kunal">
             linkedin.com/in/gnanesh-kunal
           </a>
@@ -145,7 +146,7 @@ export default function Resume() {
         </div>
       </section>
 
-      <p>Last updated November 1, 2025</p>
+      <p className="no-print">Last updated November 1, 2025</p>
     </div>
   );
 }
