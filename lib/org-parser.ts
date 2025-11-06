@@ -184,7 +184,7 @@ async function parseOrgToHtml(content: string): Promise<string> {
 
       const highlighted = await codeToHtml(decodedCode, {
         lang: detectedLang || 'text',
-        theme: 'github-light',
+        theme: 'catppuccin-latte',
       });
 
       html = html.replace(fullMatch, highlighted);
