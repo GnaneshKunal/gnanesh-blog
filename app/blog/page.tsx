@@ -9,8 +9,34 @@ export default async function BlogPage() {
   return (
     <div className="blog-container">
       <div className="blog-header">
-        <Link href="/" className="back-link">← Back</Link>
         <h1>Gnanesh&apos;s web logs</h1>
+
+        <nav>
+          <Link href="/resume">Resume</Link>
+          <Link href="/blog">Logs</Link>
+          <a
+            href="https://x.com/GnaneshKunal"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitter
+          </a>
+          <a
+            href="https://www.linkedin.com/in/gnanesh-kunal/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+          <a
+            href="https://github.com/gnaneshkunal"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+          <a href="mailto:gnaneshkunal@outlook.com">Email</a>
+        </nav>
       </div>
 
       {posts.length === 0 ? (
