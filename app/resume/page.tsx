@@ -2,6 +2,10 @@ import Link from "next/link";
 import "./styles.css";
 import "./print.css";
 
+export const metadata = {
+  title: "Gnanesh's Résumé",
+};
+
 export default function Resume() {
   return (
     <div className="resume-container">

@@ -58,10 +58,6 @@ section p {
   margin: 0.5rem 0;
 }
 
-section > div > div {
-  margin-bottom: 1.5rem;
-}
-
 section a {
   color: #000000;
   text-decoration: underline;
