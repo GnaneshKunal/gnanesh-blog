@@ -40,7 +40,7 @@ section h2 {
     font-variant: small-caps;
 }
 
-span {
+.resume-container span {
     font-style: italic;
 }
 
