@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/org-parser";
 import { formatDate } from "@/lib/blog-utils";
+import "./styles.css";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -35,19 +36,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   }
 
   return (
-    <div>
-      <div>
-        <Link href="/blog">← Back to Logs</Link>
+    <div className="post-container">
+      <div className="post-header">
+        <Link href="/blog" className="back-link">← Back to Logs</Link>
         <h1>{post.title}</h1>
-        <div>
-          <time dateTime={post.date}>{formatDate(post.date)}</time>
-        </div>
+        <time dateTime={post.date}>{formatDate(post.date)}</time>
       </div>
 
       <article dangerouslySetInnerHTML={{ __html: post.htmlContent }} />
 
-      <div>
-        <Link href="/blog">← Back to Logs</Link>
+      <div className="post-footer">
+        <Link href="/blog" className="back-link">← Back to Logs</Link>
       </div>
     </div>
   );

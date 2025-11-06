@@ -1,19 +1,23 @@
 /**
- * Format a date string to a more readable format
+ * Format a date string to org-mode format: <2021-06-24 Thu>
  */
 export function formatDate(dateString: string): string {
   try {
     // Handle org-mode date format: "2018-05-13 Mon"
-    const dateMatch = dateString.match(/(\d{4}-\d{2}-\d{2})/);
+    const dateMatch = dateString.match(/(\d{4}-\d{2}-\d{2})\s*(\w+)?/);
     if (!dateMatch) return dateString;
 
-    const date = new Date(dateMatch[1]);
+    const datePart = dateMatch[1];
+    const dayOfWeek = dateMatch[2];
 
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
+    if (dayOfWeek) {
+      return `<${datePart} ${dayOfWeek}>`;
+    }
+
+    // If no day of week provided, calculate it
+    const date = new Date(datePart);
+    const dow = date.toLocaleDateString('en-US', { weekday: 'short' });
+    return `<${datePart} ${dow}>`;
   } catch {
     return dateString;
   }

@@ -1,0 +1,33 @@
+.post-container {
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.post-header {
+  margin-bottom: 2rem;
+}
+
+.post-header time {
+  color: #bebebe;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #000000;
+  text-decoration: none;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}
+
+.post-footer {
+  margin-top: 3rem;
+}
+
+.post-container article a {
+  color: #000000;
+  text-decoration: underline;
+}

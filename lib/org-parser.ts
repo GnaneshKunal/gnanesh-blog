@@ -169,8 +169,13 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
     // Sort by date (newest first)
     return posts.sort((a, b) => {
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
+      // Extract just the date part (YYYY-MM-DD) from org-mode format
+      const dateAMatch = a.date.match(/(\d{4}-\d{2}-\d{2})/);
+      const dateBMatch = b.date.match(/(\d{4}-\d{2}-\d{2})/);
+
+      const dateA = dateAMatch ? new Date(dateAMatch[1]) : new Date(0);
+      const dateB = dateBMatch ? new Date(dateBMatch[1]) : new Date(0);
+
       return dateB.getTime() - dateA.getTime();
     });
   } catch {
