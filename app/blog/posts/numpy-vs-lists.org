@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Comparing Numpy aganist Python lists.
 
-<2018-02-05 Mon>
-
 While I was learning Machine Learning, I made my mind not to use any of
 the third-party-libraries (including numpy and Pandas) until I got to
 know what happened in the background and feel okay to use libraries.

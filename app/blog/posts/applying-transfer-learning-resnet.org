@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Transfer Learning on a ResNet structure.
 
-<2018-04-06 Fri>
-
 Recently I've written a Classifier that is able to distinguish dogs from
 cats.
 

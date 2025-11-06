@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Using JS packages that doesn't have types.
 
-<2018-05-28 Mon>
-
 I write JavaScript, your write JavaScript, everyone writes JavaScript. I
 write TypeScript, but you may not write TypeScript.
 

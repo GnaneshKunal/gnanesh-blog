@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t html-postamble:nil
 #+DESCRIPTION: Short note on why Implicits in Scala.
 
-<2018-06-20 Wed>
-
 There's a huge debate on Scala Implicits since they've introduced it to
 the language. Some people love it while some people comment it on making
 the code unpredictable. So should we use it?

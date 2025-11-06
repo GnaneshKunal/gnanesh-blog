@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Description on Flashing NodeMCU.
 
-<2018-02-07 Wed>
-
 NodeMCU always comes to my mind (just like Arduino) while I think about
 any project related to the Internet of Things. I know, Arduino is a way
 better than NodeMCU. Lots of libraries, portability, and you can plug to

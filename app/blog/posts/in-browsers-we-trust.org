@@ -8,8 +8,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: In browsers we trust!.
 
-<2021-06-24 Thu>
-
 **We tend to trust in a lot of things. Implicitly and explicitly.**
 
 With evolving web technologies, you might think its getting secure. It

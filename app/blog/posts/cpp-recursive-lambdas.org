@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Short note on C++'s lambdas and recursion.
 
-<2018-09-07 Fri>
-
 Let me say I want to reverse a sequence of elements. First I've to
 define a function.
 

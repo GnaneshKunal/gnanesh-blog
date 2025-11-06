@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Short note on containers.
 
-<2017-08-24 Thu>
-
 “Have you ever come across people saying or found yourself saying, “It
 worked on my machine”? Well, Don't say you never said /it/, you did.”
 

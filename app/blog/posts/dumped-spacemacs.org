@@ -9,8 +9,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Configuring Vanilla Emacs.
 
-<2018-04-14 Sat>
-
 The startup time for [[http://spacemacs.org/][Spacemacs]] used to be pretty high. So I've tried
 unsetting few layers, but the problem still persists.
 

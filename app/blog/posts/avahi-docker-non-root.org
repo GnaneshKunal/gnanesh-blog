@@ -8,8 +8,6 @@
 #+OPTIONS:     H:3 num:nil toc:nil \n:nil ::t |:t ^:nil -:nil f:t *:t <:t
 #+DESCRIPTION: Run mDNS on docker non-root containers.
 
-<2020-05-30 Sat>
-
 IP addresses are hard to remember and that's why we have DNS. But
 still, on most of the local systems, we don't have a DNS server and we
 have to remember the IP addresses of the systems. Even worse, let me
