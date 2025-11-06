@@ -162,6 +162,7 @@ async function parseOrgToHtml(content: string): Promise<string> {
 
   for (const match of matches) {
     const [fullMatch, lang, code] = match;
+    let detectedLang = lang;
 
     try {
       // Decode HTML entities
@@ -173,7 +174,6 @@ async function parseOrgToHtml(content: string): Promise<string> {
         .replace(/&#39;/g, "'");
 
       // Extract language from nested <code class="language-XXX"> tag
-      let detectedLang = lang;
       const langMatch = decodedCode.match(/<code class="language-(\w+)">/);
       if (langMatch) {
         detectedLang = langMatch[1];
