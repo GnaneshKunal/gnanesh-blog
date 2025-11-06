@@ -83,6 +83,40 @@ function generateSlug(filename: string): string {
 }
 
 /**
+ * Fix org-mode link syntax in footnotes that uniorg doesn't parse correctly
+ */
+function processFootnoteLinks(html: string): string {
+  // Step 1: Capture leaked link texts from main content after footnote references
+  // Pattern: <sup><a ... id="fnr.N">N</a></sup>[Link Text]]]
+  const leakedTexts = new Map<string, string>();
+
+  html = html.replace(/<sup><a[^>]*id="fnr\.(\d+)"[^>]*>\d+<\/a><\/sup>\s*\[([\s\S]+?)\]\]\]/g,
+    (match, footnoteNum, linkText) => {
+      const cleanText = linkText.replace(/\s+/g, ' ').trim();
+      leakedTexts.set(footnoteNum, cleanText);
+      // Remove the leaked text, keep only the superscript
+      return match.substring(0, match.indexOf('['));
+    }
+  );
+
+  // Step 2: Fix footnotes by replacing URL text with the captured link text
+  // Pattern in footnotes: [[<a href="URL">URL</a>
+  html = html.replace(/<div class="footnote-definition"><sup><a[^>]*id="fn\.(\d+)"[^>]*>(\d+)<\/a><\/sup><div class="footdef"[^>]*>\s*\[\[<a href="([^"]+)">([^<]+)<\/a>/g,
+    (match, footnoteNum, displayNum, url, urlText) => {
+      const linkText = leakedTexts.get(footnoteNum) || urlText;
+      return `<div class="footnote-definition"><sup><a class="footnum" id="fn.${footnoteNum}" href="#fnr.${footnoteNum}" role="doc-backlink">${displayNum}</a></sup><div class="footdef" role="doc-footnote"><a href="${url}">${linkText}</a>`;
+    }
+  );
+
+  // Step 3: Clean up any remaining orphaned brackets
+  html = html.replace(/\[\[/g, '');
+  html = html.replace(/\]\]\]/g, '');
+  html = html.replace(/\]\]/g, '');
+
+  return html;
+}
+
+/**
  * Parse org file content to HTML with syntax highlighting
  */
 async function parseOrgToHtml(content: string): Promise<string> {
@@ -93,6 +127,9 @@ async function parseOrgToHtml(content: string): Promise<string> {
 
   const result = await processor.process(content);
   let html = String(result);
+
+  // Fix org-mode links in footnotes
+  html = processFootnoteLinks(html);
 
   // Apply syntax highlighting to code blocks
   // Match various code block formats that uniorg might produce

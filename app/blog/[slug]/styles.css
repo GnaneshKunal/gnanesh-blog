@@ -31,3 +31,20 @@
   color: #000000;
   text-decoration: underline;
 }
+
+/* Footnotes styling */
+.post-container article h1:has(+ .footnote-definition),
+.post-container article h1:last-of-type {
+  font-size: 1.2rem;
+  margin-top: 3rem;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
+}
+
+.footnote-definition {
+  margin-bottom: 1rem;
+}
+
+.footdef {
+  display: inline;
+}
