@@ -36,7 +36,7 @@
 }
 
 
-section h2 {
+.resume-container section h2 {
     font-variant: small-caps;
 }
 
@@ -45,20 +45,20 @@ section h2 {
 }
 
 
-section ul {
+.resume-container section ul {
   margin-top: 0.5rem;
   padding-left: 5rem;
 }
 
-section li {
+.resume-container section li {
   margin-bottom: 5px;
 }
 
-section p {
+.resume-container section p {
   margin: 0.5rem 0;
 }
 
-section a {
+.resume-container section a {
   color: #000000;
   text-decoration: underline;
 }
