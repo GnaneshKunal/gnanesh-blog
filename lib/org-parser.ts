@@ -86,25 +86,48 @@ function generateSlug(filename: string): string {
  * Fix org-mode link syntax in footnotes that uniorg doesn't parse correctly
  */
 function processFootnoteLinks(html: string): string {
-  // Step 1: Capture leaked link texts from main content after footnote references
-  // Pattern: <sup><a ... id="fnr.N">N</a></sup>[Link Text]]]
-  const leakedTexts = new Map<string, string>();
+  // Step 1: Capture leaked texts from main content after footnote references
+  // Named footnotes leak pattern: <sup>N</sup>[Link Text]] full content] main content
+  // We need to extract: Link Text and the full content between the first ]] and final ]
+  const leakedTexts = new Map<string, {linkText: string, fullContent: string}>();
 
-  html = html.replace(/<sup><a[^>]*id="fnr\.(\d+)"[^>]*>\d+<\/a><\/sup>\s*\[([\s\S]+?)\]\]\]/g,
-    (match, footnoteNum, linkText) => {
-      const cleanText = linkText.replace(/\s+/g, ' ').trim();
-      leakedTexts.set(footnoteNum, cleanText);
+  // Pattern for named footnotes with full content leak
+  html = html.replace(/<sup><a[^>]*id="fnr\.(\d+)"[^>]*>\d+<\/a><\/sup>\s*\[([^\]]+)\]\]\s*([^\]]*?)\]\s*/g,
+    (match, footnoteNum, linkText, fullContent) => {
+      const cleanLinkText = linkText.replace(/\s+/g, ' ').trim();
+      const cleanFullContent = fullContent.replace(/\s+/g, ' ').trim();
+      leakedTexts.set(footnoteNum, {
+        linkText: cleanLinkText,
+        fullContent: cleanFullContent
+      });
       // Remove the leaked text, keep only the superscript
       return match.substring(0, match.indexOf('['));
     }
   );
 
-  // Step 2: Fix footnotes by replacing URL text with the captured link text
-  // Pattern in footnotes: [[<a href="URL">URL</a>
+  // Pattern for inline footnotes (simpler): <sup>N</sup>[Link Text]]]
+  html = html.replace(/<sup><a[^>]*id="fnr\.(\d+)"[^>]*>\d+<\/a><\/sup>\s*\[([\s\S]+?)\]\]\]/g,
+    (match, footnoteNum, linkText) => {
+      if (!leakedTexts.has(footnoteNum)) {
+        const cleanText = linkText.replace(/\s+/g, ' ').trim();
+        leakedTexts.set(footnoteNum, {linkText: cleanText, fullContent: ''});
+      }
+      return match.substring(0, match.indexOf('['));
+    }
+  );
+
+  // Step 2: Fix footnotes by replacing URL with link text and adding full content
   html = html.replace(/<div class="footnote-definition"><sup><a[^>]*id="fn\.(\d+)"[^>]*>(\d+)<\/a><\/sup><div class="footdef"[^>]*>\s*\[\[<a href="([^"]+)">([^<]+)<\/a>/g,
     (match, footnoteNum, displayNum, url, urlText) => {
-      const linkText = leakedTexts.get(footnoteNum) || urlText;
-      return `<div class="footnote-definition"><sup><a class="footnum" id="fn.${footnoteNum}" href="#fnr.${footnoteNum}" role="doc-backlink">${displayNum}</a></sup><div class="footdef" role="doc-footnote"><a href="${url}">${linkText}</a>`;
+      const leaked = leakedTexts.get(footnoteNum);
+      if (leaked && leaked.fullContent) {
+        // Named footnote with full content
+        return `<div class="footnote-definition"><sup><a class="footnum" id="fn.${footnoteNum}" href="#fnr.${footnoteNum}" role="doc-backlink">${displayNum}</a></sup><div class="footdef" role="doc-footnote"><a href="${url}">${leaked.linkText}</a> ${leaked.fullContent}`;
+      } else if (leaked && leaked.linkText) {
+        // Inline footnote with just link text
+        return `<div class="footnote-definition"><sup><a class="footnum" id="fn.${footnoteNum}" href="#fnr.${footnoteNum}" role="doc-backlink">${displayNum}</a></sup><div class="footdef" role="doc-footnote"><a href="${url}">${leaked.linkText}</a>`;
+      }
+      return match;
     }
   );
 
