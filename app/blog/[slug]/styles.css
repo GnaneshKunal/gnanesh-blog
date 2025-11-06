@@ -48,3 +48,12 @@
 .footdef {
   display: inline;
 }
+
+/* Code block styling */
+.post-container article pre {
+  overflow-x: auto;
+  max-width: 100%;
+  background-color: #f8f8f8;
+  padding: 1rem;
+  border-radius: 4px;
+}

@@ -155,35 +155,42 @@ async function parseOrgToHtml(content: string): Promise<string> {
   html = processFootnoteLinks(html);
 
   // Apply syntax highlighting to code blocks
-  // Match various code block formats that uniorg might produce
-  const codeBlockPatterns = [
-    /<pre><code class="language-(\w+)">([\s\S]*?)<\/code><\/pre>/g,
-    /<pre class="src src-(\w+)">([\s\S]*?)<\/pre>/g,
-    /<div class="src-container"><pre class="src src-(\w+)">([\s\S]*?)<\/pre><\/div>/g,
-  ];
+  // uniorg produces: <pre class="src-block" data-language="LANG">CODE</pre>
+  const srcBlockPattern = /<pre class="src-block"(?:\s+data-language="(\w+)")?\s*>([\s\S]*?)<\/pre>/g;
 
-  for (const pattern of codeBlockPatterns) {
-    const matches = [...html.matchAll(pattern)];
-    for (const match of matches) {
-      const [fullMatch, lang, code] = match;
-      try {
-        // Decode HTML entities
-        const decodedCode = code
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-          .replace(/&amp;/g, '&')
-          .replace(/&quot;/g, '"')
-          .replace(/&#39;/g, "'");
+  const matches = [...html.matchAll(srcBlockPattern)];
 
-        const highlighted = await codeToHtml(decodedCode, {
-          lang: lang || 'text',
-          theme: 'github-dark',
-        });
-        html = html.replace(fullMatch, highlighted);
-      } catch {
-        // If highlighting fails, keep original code block
-        console.warn(`Failed to highlight code block with language: ${lang}`);
+  for (const match of matches) {
+    const [fullMatch, lang, code] = match;
+
+    try {
+      // Decode HTML entities
+      let decodedCode = code
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'");
+
+      // Extract language from nested <code class="language-XXX"> tag
+      let detectedLang = lang;
+      const langMatch = decodedCode.match(/<code class="language-(\w+)">/);
+      if (langMatch) {
+        detectedLang = langMatch[1];
       }
+
+      // Remove any nested <code> tags that might be in the content
+      decodedCode = decodedCode.replace(/<\/?code[^>]*>/g, '').trim();
+
+      const highlighted = await codeToHtml(decodedCode, {
+        lang: detectedLang || 'text',
+        theme: 'github-light',
+      });
+
+      html = html.replace(fullMatch, highlighted);
+    } catch (error) {
+      // If highlighting fails, keep original code block with background
+      console.warn(`Failed to highlight code block with language: ${detectedLang || 'unknown'}`, error);
     }
   }
 
