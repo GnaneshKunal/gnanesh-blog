@@ -45,10 +45,10 @@ export default async function BlogPage() {
         <ul className="blog-list">
           {posts.map((post, index) => (
             <li key={post.slug} className={index % 2 === 0 ? 'even' : 'odd'}>
+              <time dateTime={post.date}>
+                {formatDateSimple(post.date)}
+              </time>
               <Link href={`/blog/${post.slug}`}>
-                <time dateTime={post.date}>
-                  {formatDateSimple(post.date)}
-                </time>
                 <span className="blog-title">{post.title}</span>
               </Link>
             </li>
