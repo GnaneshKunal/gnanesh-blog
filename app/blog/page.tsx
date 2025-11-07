@@ -36,6 +36,7 @@ export default async function BlogPage() {
             GitHub
           </a>
           <a href="mailto:gnaneshkunal@outlook.com">Email</a>
+          <Link href="/">About</Link>
         </nav>
       </header>
 
