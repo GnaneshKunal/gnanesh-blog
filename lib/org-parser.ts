@@ -5,6 +5,7 @@ import uniorgParse from 'uniorg-parse';
 import uniorg2rehype from 'uniorg-rehype';
 import rehypeStringify from 'rehype-stringify';
 import { codeToHtml } from 'shiki';
+import katex from 'katex';
 
 export interface BlogPost {
   slug: string;
@@ -148,6 +149,46 @@ function fixImagePaths(html: string): string {
 }
 
 /**
+ * Render math formulas using KaTeX server-side
+ */
+function renderMathFormulas(html: string): string {
+  // Match math spans with nested braces: <span class="math math-inline">{...}</span>
+  // Use a non-greedy match to get content between outer braces
+  const mathInlinePattern = /<span class="math math-inline">\{([\s\S]+?)\}<\/span>/g;
+  const mathDisplayPattern = /<span class="math math-display">\{([\s\S]+?)\}<\/span>/g;
+
+  // Render inline math
+  html = html.replace(mathInlinePattern, (match, latex) => {
+    try {
+      const rendered = katex.renderToString(latex, {
+        displayMode: false,
+        throwOnError: false,
+      });
+      return rendered;
+    } catch (error) {
+      console.error('KaTeX inline rendering error:', error, 'LaTeX:', latex);
+      return match;
+    }
+  });
+
+  // Render display math
+  html = html.replace(mathDisplayPattern, (match, latex) => {
+    try {
+      const rendered = katex.renderToString(latex, {
+        displayMode: true,
+        throwOnError: false,
+      });
+      return rendered;
+    } catch (error) {
+      console.error('KaTeX display rendering error:', error, 'LaTeX:', latex);
+      return match;
+    }
+  });
+
+  return html;
+}
+
+/**
  * Parse org file content to HTML with syntax highlighting
  */
 async function parseOrgToHtml(content: string): Promise<string> {
@@ -164,6 +205,9 @@ async function parseOrgToHtml(content: string): Promise<string> {
 
   // Fix image paths
   html = fixImagePaths(html);
+
+  // Render math formulas server-side
+  html = renderMathFormulas(html);
 
   // Apply syntax highlighting to code blocks
   // uniorg produces: <pre class="src-block" data-language="LANG">CODE</pre>

@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getAllPosts, getPostBySlug } from "@/lib/org-parser";
 import { formatDate } from "@/lib/blog-utils";
 import "./styles.css";
+import "katex/dist/katex.min.css";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
