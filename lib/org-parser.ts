@@ -140,6 +140,14 @@ function processFootnoteLinks(html: string): string {
 }
 
 /**
+ * Fix image paths from org-mode file:img/ to /images/
+ */
+function fixImagePaths(html: string): string {
+  // Replace file:img/ with /images/ in img src attributes
+  return html.replace(/src="file:img\//g, 'src="/images/');
+}
+
+/**
  * Parse org file content to HTML with syntax highlighting
  */
 async function parseOrgToHtml(content: string): Promise<string> {
@@ -153,6 +161,9 @@ async function parseOrgToHtml(content: string): Promise<string> {
 
   // Fix org-mode links in footnotes
   html = processFootnoteLinks(html);
+
+  // Fix image paths
+  html = fixImagePaths(html);
 
   // Apply syntax highlighting to code blocks
   // uniorg produces: <pre class="src-block" data-language="LANG">CODE</pre>
