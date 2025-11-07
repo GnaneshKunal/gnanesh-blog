@@ -1,8 +1,5 @@
 /* Resume screen styles - scoped to avoid affecting other pages */
 .resume-container {
-  /* background-color: #eeeeee; */
-  color: #222222;
-  font-family: serif;
   letter-spacing: 0.02em;
   font-size: 10pt;
   padding: 20px;
@@ -10,31 +7,6 @@
   margin-right: 20%;
   min-height: 100vh;
 }
-
-.contact-info {
-  /* display: flex; */
-  /* gap: 0.5rem; */
-  /* align-items: center; */
-  /* flex-wrap: wrap; */
-  /* margin-bottom: 2rem; */
-}
-
-.contact-info a {
-  color: #000000;
-  text-decoration: underline;
-}
-
-.no-print {
-  /* margin-bottom: 2rem; */
-  display: inline-block;
-  color: #000000;
-  text-decoration: none;
-}
-
-.no-print:hover {
-  text-decoration: underline;
-}
-
 
 .resume-container section h2 {
     font-variant: small-caps;
@@ -57,9 +29,3 @@
 .resume-container section p {
   margin: 0.5rem 0;
 }
-
-.resume-container section a {
-  color: #000000;
-  text-decoration: underline;
-}
-

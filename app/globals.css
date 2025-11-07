@@ -1,7 +1,4 @@
 body {
-  background: #ffffff;
-  color: #000000;
-  font-family: serif;
   margin: 0;
   padding: 0;
 }
@@ -17,19 +14,4 @@ nav {
   display: flex;
   gap: 1.5rem;
   flex-wrap: wrap;
-}
-
-nav a {
-  color: #000000;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-
-nav a:hover {
-  border-bottom-color: #000000;
-}
-
-.home-container section a {
-  color: #000000;
-  text-decoration: underline;
 }
