@@ -1,37 +1,10 @@
-import Link from "next/link";
+import Header from "./components/Header";
 
 export default function Home() {
   return (
     <div className="home-container">
       <main>
-        <h1>Gnanesh</h1>
-
-        <nav>
-          <Link href="/resume">Resume</Link>
-          <Link href="/blog">Logs</Link>
-          <a
-            href="https://x.com/GnaneshKunal"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Twitter
-          </a>
-          <a
-            href="https://www.linkedin.com/in/gnanesh-kunal/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            LinkedIn
-          </a>
-          <a
-            href="https://github.com/gnaneshkunal"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-          <a href="mailto:gnaneshkunal@outlook.com">Email</a>
-        </nav>
+        <Header title="Gnanesh" />
 
         <section>
           <p>
