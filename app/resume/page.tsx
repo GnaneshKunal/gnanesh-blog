@@ -168,13 +168,13 @@ export default function Resume() {
 
       <section>
         <h2>Technical Skills</h2>
-        <div>
+        <ul>
           {Object.entries(TECHNICAL_SKILLS).map(([category, skills]) => (
-            <div key={category}>
+            <li key={category}>
               <strong>{category}:</strong> {skills}
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <section>
