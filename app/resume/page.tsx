@@ -13,7 +13,7 @@ export const metadata = {
 const PERSONAL_INFO = {
   name: "Gnanesh R",
   email: "gnaneshkunal@outlook.com",
-  website: "gnanesh.me",
+  website: "gnane.sh",
   github: "github.com/gnaneshkunal",
   linkedin: "linkedin.com/in/gnanesh-kunal",
 };

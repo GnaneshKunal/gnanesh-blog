@@ -9,23 +9,23 @@ export async function GET() {
   const feed = new Feed({
     title: "Gnanesh's Blog",
     description: "Thoughts on software, systems, and engineering",
-    id: "https://gnanesh.me/",
-    link: "https://gnanesh.me/",
+    id: "https://gnane.sh/",
+    link: "https://gnane.sh/",
     language: "en",
-    favicon: "https://gnanesh.me/favicon.ico",
+    favicon: "https://gnane.sh/favicon.ico",
     copyright: `All rights reserved ${new Date().getFullYear()}, Gnanesh Kunal`,
     author: {
       name: "Gnanesh Kunal",
       email: "gnaneshkunal@outlook.com",
-      link: "https://gnanesh.me",
+      link: "https://gnane.sh",
     },
   });
 
   posts.forEach((post) => {
     feed.addItem({
       title: post.title,
-      id: `https://gnanesh.me/blog/${post.slug}`,
-      link: `https://gnanesh.me/blog/${post.slug}`,
+      id: `https://gnane.sh/blog/${post.slug}`,
+      link: `https://gnane.sh/blog/${post.slug}`,
       description: post.description,
       content: post.htmlContent,
       author: [
