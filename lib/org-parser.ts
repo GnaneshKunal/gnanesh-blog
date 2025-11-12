@@ -314,26 +314,3 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   return posts.find(post => post.slug === slug) || null;
 }
 
-/**
- * Get all unique tags
- */
-export async function getAllTags(): Promise<string[]> {
-  const posts = await getAllPosts();
-  const tagsSet = new Set<string>();
-
-  posts.forEach(post => {
-    post.tags.forEach(tag => tagsSet.add(tag));
-  });
-
-  return Array.from(tagsSet).sort();
-}
-
-/**
- * Get posts by tag
- */
-export async function getPostsByTag(tag: string): Promise<BlogPost[]> {
-  const posts = await getAllPosts();
-  return posts.filter(post =>
-    post.tags.some(t => t.toLowerCase() === tag.toLowerCase())
-  );
-}

@@ -35,7 +35,6 @@ export async function GET() {
         },
       ],
       date: new Date(post.date),
-      category: post.tags.map((tag) => ({ name: tag })),
     });
   });
 
