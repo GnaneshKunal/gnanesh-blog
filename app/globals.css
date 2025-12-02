@@ -15,3 +15,8 @@ nav {
   gap: 1.5rem;
   flex-wrap: wrap;
 }
+
+/* Link styles to prevent visited color change */
+a:link, a:visited {
+  color: #0000FF;
+}
