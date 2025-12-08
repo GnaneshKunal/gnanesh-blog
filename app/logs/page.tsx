@@ -20,7 +20,7 @@ export default async function BlogPage() {
               <time dateTime={post.date}>
                 {formatDateSimple(post.date)}
               </time>
-              <Link href={`/blog/${post.slug}`}>
+              <Link href={`/logs/${post.slug}`}>
                 <span className="blog-title">{post.title}</span>
               </Link>
             </li>

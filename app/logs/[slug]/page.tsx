@@ -39,7 +39,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   return (
     <div className="post-container">
       <div className="post-header">
-        <Link href="/blog" className="back-link">← Back to Logs</Link>
+        <Link href="/logs" className="back-link">← Back to Logs</Link>
         <h1>{post.title}</h1>
         <time dateTime={post.date}>{formatDate(post.date)}</time>
       </div>
@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <article dangerouslySetInnerHTML={{ __html: post.htmlContent }} />
 
       <div className="post-footer">
-        <Link href="/blog" className="back-link">← Back to Logs</Link>
+        <Link href="/logs" className="back-link">← Back to Logs</Link>
       </div>
     </div>
   );

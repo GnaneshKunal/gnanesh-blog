@@ -21,7 +21,7 @@ export interface BlogPost {
   htmlContent: string;
 }
 
-const POSTS_DIRECTORY = join(process.cwd(), 'app', 'blog', 'posts');
+const POSTS_DIRECTORY = join(process.cwd(), 'app', 'logs', 'posts');
 
 /**
  * Extract metadata from org file content

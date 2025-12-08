@@ -12,7 +12,7 @@ export default function Header({ title, showAboutLink = false }: HeaderProps) {
 
       <nav>
         <Link href="/resume">Resume</Link>
-        <Link href="/blog">Logs</Link>
+        <Link href="/logs">Logs</Link>
         <a
           href="https://x.com/GnaneshKunal"
           target="_blank"

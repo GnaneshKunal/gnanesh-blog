@@ -24,8 +24,8 @@ export async function GET() {
   posts.forEach((post) => {
     feed.addItem({
       title: post.title,
-      id: `https://gnane.sh/blog/${post.slug}`,
-      link: `https://gnane.sh/blog/${post.slug}`,
+      id: `https://gnane.sh/logs/${post.slug}`,
+      link: `https://gnane.sh/logs/${post.slug}`,
       description: post.description,
       content: post.htmlContent,
       author: [
