@@ -23,6 +23,9 @@ export default async function BlogPage() {
               <Link href={`/blog/${post.slug}`}>
                 <span className="blog-title">{post.title}</span>
               </Link>
+              {post.tags && post.tags.length > 0 && (
+                <span className="tags">{post.tags.join(', ')}</span>
+              )}
             </li>
           ))}
         </ul>

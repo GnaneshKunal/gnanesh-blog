@@ -1,0 +1,23 @@
+#+TITLE: AI-Assisted Coding and Outages
+#+AUTHOR: Gnanesh Kunal
+#+EMAIL: gnaneshkunal@outlook.com
+#+DATE: 2025-12-08
+#+KEYWORDS: ai, coding, outages, opinion
+#+TAGS: opinion
+#+LANGUAGE: en
+#+DESCRIPTION: Thoughts on recent tech outages and their potential connection to AI-assisted coding practices.
+
+Lately it feels like every week there's a massive outage: Cloudflare unwrap bug[fn:: [[https://blog.cloudflare.com/18-november-2025-outage/][Cloudflare unwrap bug]]], React vuln[fn:: [[https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components][React vuln]]], weird AWS behavior[fn:: [[https://aws.amazon.com/message/101925/][weird AWS behavior]]], Windows breaking localhost[fn:: [[https://www.windowscentral.com/microsoft/windows/windows-11-update-killed-localhost-support][Windows breaking localhost]]]…
+
+Big incidents have always existed, but the current flood feels different.
+
+My take: most of these seem tied to the explosion of AI-assisted / "vibe" coding. Engineers still review, CI still runs, tests still pass… yet things blow up in prod.
+
+The tools got fast, but our verification systems around AI-generated code clearly aren't there yet.
+
+Not against AI coding — just saying we're not catching the new class of mistakes it introduces. That's all.
+
+-----
+
+You can also find the tweet [[https://x.com/GnaneshKunal/status/1998004557323084011][here]].
+
