@@ -110,7 +110,7 @@ const EDUCATION = {
   degree: "B.Tech. in Computer Science",
 };
 
-const LAST_UPDATED = "November 1, 2025";
+const LAST_UPDATED = "June 2, 2026";
 
 // ============================================
 // RESUME RENDERING - Markup/presentation layer
