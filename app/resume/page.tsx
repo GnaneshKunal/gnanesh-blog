@@ -46,7 +46,7 @@ const EXPERIENCE = [
     ],
   },
   {
-    period: "Oct 2021-Present",
+    period: "Oct 2021-Jan 2025",
     company: "Redis",
     companyUrl: "https://redis.io",
     role: "Software Engineer",
